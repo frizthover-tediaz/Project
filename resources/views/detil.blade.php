@@ -56,6 +56,8 @@
 			    			<input type="hidden" name="kelas" value="{{ $data['kelas'] }}">
 		    			</tr>
 		    			<tr class="height"></tr>
+		    			<tr class="height"></tr>
+		    			<tr class="height"></tr>
 		    			<tr>
 			    			<td>Barang</td>
 			    			<td>:</td>
@@ -72,6 +74,21 @@
 			    				</tr>
 			    				@endfor
 			    			</tr>
+		    			</tr>
+		    			<tr class="height"></tr>
+		    			<tr class="height"></tr>
+		    			<tr class="height"></tr>
+		    			<tr>
+		    				<td>Tanggal Pinjam</td>
+		    				<td>:</td>
+		    				<td class="width"></td>
+		    				<td>{{ $data['tgl_pinjam'] }}</td>
+		    			</tr>
+		    			<tr>
+		    				<td>Tanggal Kembali</td>
+		    				<td>:</td>
+		    				<td class="width"></td>
+		    				<td>{{ $data['tgl_kembali'] }}</td>
 		    			</tr>
 		    		</table>
 		    		<center>
