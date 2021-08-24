@@ -1,0 +1,75 @@
+*{
+	box-sizing: border-box;
+	margin:0;
+	padding: 0;
+}
+body{
+	width: 100%;
+	height: 100%;
+	background-image: url(../img/bg.png);
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-attachment: fixed;
+}
+.buttonnav{
+	width: 100px;
+	height: 48px;
+	background-color: #B1B9FE;
+	border:1px solid #000;
+	border-radius: 15px;
+	font-family: 'Bai Jamjuree', sans-serif;
+}
+.centert{
+	padding:20% !important;
+	text-align: center;
+}
+.main-content{
+	margin-top:5%;
+}
+.title{
+	font-family: 'Bai Jamjuree', sans-serif;
+	font-weight: 700;
+}
+.width{
+	width: 8px;
+}
+.height{
+	height: 8px;
+}
+.marg{
+	margin-top: 10%;
+}
+.content{
+	padding: 5%;
+}
+.mcontent{
+	text-align: left;
+}
+.border{
+	width: 50%;
+	padding:3% 4% 3% 4%;
+	border:2px solid #000;
+}
+.forme{
+	width: 100%;
+	border-radius: 5px;
+	border:1px solid #000;
+	outline-width: 0;
+	padding: .5% 3% .5% 3%;
+}
+.buttonnav1{
+	width: 100px;
+	height: 35px;
+	background-color: #B1B9FE;
+	border:1px solid #000;
+	border-radius: 15px;
+	font-family: 'Bai Jamjuree', sans-serif;
+}
+.btns{
+	text-align: center;
+	margin-top: 10%;
+}
+.formt{
+	padding: 1%;
+	resize: none;
+}
