@@ -89,6 +89,12 @@
 		    				<td class="width"></td>
 		    				<td>{{ $data['tgl_pinjam'] }}</td>
 		    			</tr>
+		    			<tr>
+		    				<td>Tanggal Kembali</td>
+		    				<td>:</td>
+		    				<td class="width"></td>
+		    				<td>{{ $data['tgl_kembali'] }}</td>
+		    			</tr>
 		    		</table>
 		    		<center>
 		    			<div class="marg">
