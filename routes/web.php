@@ -14,14 +14,15 @@ use Illuminate\Support\Facades\Route;
 */
 use App\Http\Controllers\Scanner;
 
-Route::get('/', function () {
-    return view('index');
+Route::get('/', function(){
+	return view('identity');
 });
+Route::post('/ide', [Scanner::class, 'index0'] );
 
 Route::post('/item', [Scanner::class, 'store'] );
 
-Route::get('/identity', function(){
-	return view('identity');
+Route::get('/barang', function(){
+	return view('index');
 });
 
 Route::post('/ident', [Scanner::class, 'store1']);
@@ -33,3 +34,13 @@ Route::post('/done', [Scanner::class, 'store2']);
 Route::get('/manual', [Scanner::class, 'index2']);
 
 Route::post('/man', [Scanner::class, 'store3']);
+
+Route::get('/return', function(){
+	return view('return');
+});
+
+Route::get('/iden', function(){
+	return view('idm');
+});
+
+Route::post('/idem', [Scanner::class, 'storem']);

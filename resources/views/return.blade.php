@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
 	<title>Manual</title>
@@ -23,17 +23,11 @@
 			        <a class="nav-link active" href="#"><img src="img/logo.png"></a>
 	     	    </li>
 			</ul>
-			<form id="form-e" method="POST" action="{{ url('/ide') }}">
-				@csrf
-				<ul class="navbar-nav ml-auto">
-				    <li class="nav-item">
-				        <button name="valid" id="valid" value="Otomatis" class="buttonnav">Otomatis</button>
-				    </li>
-				    <li class="nav-item">
-				        <button name="valid" id="valid" value="Kembalikan" class="buttonnav">Kembalikan</button>
-				    </li>
-				</ul>
-			</form>
+			<ul class="navbar-nav ml-auto">
+			    <li class="nav-item">
+			        <a class="nav-link" href="{{ url('/') }}"><input type="button" name="otomatis" id="otomatis" value="Otomatis" class="buttonnav"></a>
+			    </li>
+			</ul>
 		</nav>
 	<div class="main-content">
 	    <center>
@@ -41,7 +35,6 @@
 	    		<div class="mcontent">
 	    			<form action="{{ url('/man') }}" method="POST">
 	    				@csrf
-	    				<input type="hidden" name="kode_user" id="kode_user" value="{{ $scan['kode_user'] }}">
 		    			<table style="width: 100%">
 		    				<tr>
 		    					<td>Kode Barang</td>
@@ -50,8 +43,8 @@
 		    					<td>
 		    						<input class="forme" list="brow" name="kodebarang">
 									<datalist id="brow">
-										@foreach($scan['brg'] as $p)
-										<option value="{{ $p->kodebarang}}">{{$p->nama}}</option>
+										@foreach($scan as $p)
+										<option value="{{ $p->kodebarang }}">{{ $p->nama }}</option>
 										@endforeach
 									</datalist>
 		    					</td>
@@ -74,4 +67,4 @@
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   </body>
-</html>
+</html> -->

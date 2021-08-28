@@ -15,9 +15,9 @@ class CreateTbidentityTable extends Migration
     {
         Schema::create('tbidentity', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('nis');
-            $table->string('nama');
-            $table->string('kelas');
+            $table->integer('kode_user');
+            $table->string('nama', 50);
+            $table->string('kelas', 50);
         });
     }
 

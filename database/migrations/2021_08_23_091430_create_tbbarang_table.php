@@ -15,6 +15,7 @@ class CreateTbbarangTable extends Migration
     {
         Schema::create('tbbarang', function (Blueprint $table) {
             $table->string('kodebarang', 50);
+            $table->integer('qty');
             $table->string('nama', 50);
         });
     }

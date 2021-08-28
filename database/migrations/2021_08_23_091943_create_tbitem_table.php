@@ -15,11 +15,12 @@ class CreateTbitemTable extends Migration
     {
         Schema::create('tbitem', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('kode_user', 50);
             $table->string('kodebarang', 50);
             $table->string('nama', 50);
             $table->integer('qty');
-            $table->dateTime('tgl_pinjam', $presicion = 0);
-            $table->dateTime('tgl_kembali', $presicion = 0);
+            $table->dateTime('tgl_pinjam', $presicion = 0)->nullable()->default(null);
+            $table->dateTime('tgl_kembali', $presicion = 0)->nullable()->default(null);
         });
     }
 

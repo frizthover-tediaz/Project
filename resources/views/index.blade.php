@@ -23,11 +23,18 @@
 			        <a class="nav-link active" href="#"><img src="img/logo.png"></a>
 	     	    </li>
 			</ul>
-			<ul class="navbar-nav ml-auto">
-			    <li class="nav-item">
-			        <a class="nav-link" href="{{ url('/manual') }}"><input type="button" name="manual" id="manual" value="Manual" class="buttonnav"></a>
-			    </li>
-			</ul>
+			<form id="form-e" method="POST" action="{{ url('/ide') }}">
+				@csrf
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+					    <button name="valid" id="valid" value="Manual" class="buttonnav">Manual</button>
+					</li>
+					<li class="nav-item">
+					   <button name="valid" id="valid" value="Kembalikan" class="buttonnav">Kembalikan</button>
+					</li>
+				</ul>
+			</form>
+
 		</nav>
 	<div class="main-content">
 	    <div class="row">
@@ -39,8 +46,9 @@
 	          	<form id="form" method="POST" action="{{ url('/item') }}">
 	          		@csrf
 	            	<input type="hidden" name="thevalue" id="thevalue" value="">
+	            	<input type="hidden" name="kode_user" id="kode_user" value="{{ $data['kode_user'] }}">
 	        	</form>
-	            <h2 class="title">Scan Item</h2>
+	            <h2 class="title">Scan Barang</h2>
 	          </div>
 	        </div>
 	      </div>

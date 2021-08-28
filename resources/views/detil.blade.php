@@ -22,15 +22,20 @@
 		        <li class="nav-item">
 			        <a class="nav-link active" href="#"><img src="img/logo.png"></a>
 	     	    </li>
-			</ul>
+			</ul>			    
+			<form id="form-e" method="POST" action="{{ url('/ide') }}">
+				@csrf
 			<ul class="navbar-nav ml-auto">
+
 			    <li class="nav-item">
-			        <a class="nav-link" href="{{ url('/') }}"><input type="button" value="Scan Lagi?" class="buttonnav"></a>
+			        <button  name="valid" id="valid" value="Scan" class="buttonnav">Scan Lagi?</button>
 			    </li>
 			    <li class="nav-item">
-			        <a class="nav-link" href="{{ url('/manual') }}"><input type="button" name="manual" id="manual" value="Manual" class="buttonnav"></a>
+			        <button  name="valid" id="valid" value="Manual" class="buttonnav">Manual</button>
 			    </li>
+				
 			</ul>
+			</form>
 		</nav>
 	<div class="main-content">
 	    <center>
@@ -56,6 +61,8 @@
 			    			<input type="hidden" name="kelas" value="{{ $data['kelas'] }}">
 		    			</tr>
 		    			<tr class="height"></tr>
+		    			<tr class="height"></tr>
+		    			<tr class="height"></tr>
 		    			<tr>
 			    			<td>Barang</td>
 			    			<td>:</td>
@@ -72,6 +79,15 @@
 			    				</tr>
 			    				@endfor
 			    			</tr>
+		    			</tr>
+		    			<tr class="height"></tr>
+		    			<tr class="height"></tr>
+		    			<tr class="height"></tr>
+		    			<tr>
+		    				<td>Tanggal Pinjam</td>
+		    				<td>:</td>
+		    				<td class="width"></td>
+		    				<td>{{ $data['tgl_pinjam'] }}</td>
 		    			</tr>
 		    		</table>
 		    		<center>

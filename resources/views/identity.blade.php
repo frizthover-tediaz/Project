@@ -23,14 +23,17 @@
 			        <a class="nav-link active" href="#"><img src="img/logo.png"></a>
 	     	    </li>
 			</ul>
-			<ul class="navbar-nav ml-auto">
-			    <li class="nav-item">
-			        <a class="nav-link" href="{{ url('/') }}"><input type="button" value="Scan Lagi?" class="buttonnav"></a>
-			    </li>
-			    <li class="nav-item">
-			        <a class="nav-link" href="{{ url('/manual') }}"><input type="button" name="manual" id="manual" value="Manual" class="buttonnav"></a>
-			    </li>
-			</ul>
+			<form id="form-e" method="POST" action="{{ url('/ide') }}">
+				@csrf
+				<ul class="navbar-nav ml-auto">
+				    <li class="nav-item">
+				        <button name="valid" id="valid" value="Manual" class="buttonnav">Manual</button>
+				    </li>
+				    <li class="nav-item">
+				        <button name="valid" id="valid" value="Kembalikan" class="buttonnav">Kembalikan</button>
+				    </li>
+				</ul>
+			</form>
 		</nav>
 	<div class="main-content">
 	    <div class="row">
@@ -43,7 +46,7 @@
 	          		@csrf
 	            	<input type="hidden" name="thevalue" id="thevalue" value="">
 	        	</form>
-	            <h2 class="title">Scan Identity</h2>
+	            <h2 class="title">Scan Identitas</h2>
 	          </div>
 	        </div>
 	      </div>

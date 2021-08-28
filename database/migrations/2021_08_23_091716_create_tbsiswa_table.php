@@ -14,7 +14,7 @@ class CreateTbsiswaTable extends Migration
     public function up()
     {
         Schema::create('tbsiswa', function (Blueprint $table) {
-            $table->integer('nis');
+            $table->integer('kode_user');
             $table->primary('nis');
             $table->string('nama', 50);
             $table->string('kelas',50);

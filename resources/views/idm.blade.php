@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Manual</title>
+	<title>Scan Identity</title>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
@@ -36,42 +36,23 @@
 			</form>
 		</nav>
 	<div class="main-content">
-	    <center>
-	    	<div class="border">
-	    		<div class="mcontent">
-	    			<form action="{{ url('/man') }}" method="POST">
-	    				@csrf
-	    				<input type="hidden" name="kode_user" id="kode_user" value="{{ $scan['kode_user'] }}">
-		    			<table style="width: 100%">
-		    				<tr>
-		    					<td>Kode Barang</td>
-		    					<td>:</td>
-		    					<td class="width"></td>
-		    					<td>
-		    						<input class="forme" list="brow" name="kodebarang">
-									<datalist id="brow">
-										@foreach($scan['brg'] as $p)
-										<option value="{{ $p->kodebarang}}">{{$p->nama}}</option>
-										@endforeach
-									</datalist>
-		    					</td>
-		    				</tr>
-		    				<tr class="height"></tr>
-		    				<tr>
-		    					<td>Qty</td>
-		    					<td>:</td>
-		    					<td class="width"></td>
-		    					<td><input class="forme" type="number" name="qty" min="0" oninput="validity.valid||(value='');" value=""></td>
-		    				</tr>		
-		    			</table>
-		    			<div class="btns">
-		    				<button class="buttonnav1">Submit</button>
-		    			</div>
-	    			</form>
-	    		</div>
-	    	</div>
-	    </center>
+	    <div class="row">
+	        <div class="col-md-6">
+	          <video id="preview" width="480"></video>
+	        </div>
+	        <div class="col-md-6">
+	          <div class="centert">
+	          	<form id="form" method="POST" action="{{ url('/idem') }}">
+	          		@csrf
+	            	<input type="hidden" name="thevalue" id="thevalue" value="">
+	        	</form>
+	            <h2 class="title">Scan Identitas</h2>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
 	</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="js/instascan.min.js"></script>
+    <script src="js/insert.js"></script>
   </body>
 </html>

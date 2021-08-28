@@ -15,12 +15,15 @@ class CreateTbdetilTable extends Migration
     {
         Schema::create('tbdetil', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nama_siswa');
-            $table->string('kelas');
-            $table->string('nama_barang');
-            $table->string('qty');
-            $table->dateTime('tgl_pinjam', $presicion = 0);
-            $table->dateTime('tgl_kembali', $presicion = 0);
+            $table->string('kode_user', 50);
+            $table->string('nama_siswa', 50);
+            $table->string('kelas', 50);
+            $table->string('kodebarang', 50);
+            $table->string('nama_barang', 50);
+            $table->integer('qty');
+            $table->dateTime('tgl_pinjam', $presicion = 0)->nullable()->default(null);
+            $table->dateTime('tgl_kembali', $presicion = 0)->nullable()->default(null);
+            $table->string('status', 50);
         });
     }
 

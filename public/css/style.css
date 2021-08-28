@@ -73,3 +73,6 @@ body{
 	padding: 1%;
 	resize: none;
 }
+.nav-item{
+	margin-right: 5% !important;
+}
