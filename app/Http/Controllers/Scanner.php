@@ -24,7 +24,7 @@ class Scanner extends Controller
         }else if($valid=="Otomatis"){
             return redirect('/');
         }else if($valid=="Kembalikan"){
-            return $valid;
+            return redirect('/idr');
         }else if($valid=="Scan"){
             return redirect('/');
         }
@@ -303,16 +303,12 @@ class Scanner extends Controller
 
             $qtyb = $qtybrg[0]->qty;
 
-            if($qtyb<=0){
-                return alert("Stok Kosong")->redirect('/iden');
-            }
 
             $qtybaru = $qtyb-$qtys;
 
-            if($qtybaru<=0){
-                return alert("Melebihi Stok Barang")->redirect('/iden');
+            if($qtybaru<0){
+                 return redirect('/')->with('alert','Qty tidak bisa dibawah 0');
             }
-
             $data = array(
                     'kode_user'=>$kode_user,
                     'nama_siswa'=> $nama_siswa,
@@ -337,7 +333,7 @@ class Scanner extends Controller
         DB::table('tbitem')->truncate();
         DB::table('tbidentity')->truncate();
 
-        return redirect('/');
+        return redirect('/')->with('alert','Berhasil');
     }
 
     public function store3(Request $request)
@@ -437,6 +433,93 @@ class Scanner extends Controller
         return view('manual', ['scan'=>$scan]);
 
         // return view('manual')->with('scan', $scan);
+    }
+
+    public function storer(Request $request)
+    {
+        $kode_user = $request->thevalue;
+
+        $select = DB::table('tbsiswa')->select('nama','kelas')->where('kode_user', $kode_user)->get();
+        
+        $scanner = DB::table('tbdetil')
+                ->select('*')
+                ->where('kode_user', $kode_user)
+                ->where('status', "belum")
+                ->get();
+
+
+        $scan = array(
+                'kode_user'=>$kode_user,
+                'brg'=>$scanner,
+        );
+
+        // return $scan;
+        return view('return', ['scan'=>$scan]);
+    }
+
+    public function storen(Request $request)
+    {
+        $id = $request->id;
+        $kode_user = $request->kode_user;
+
+        $select_if = DB::table('tbdetil')->select('*')->where('id', $id)->get();
+
+        $select_count = count($select_if);
+
+        if($select_count!=0){
+
+            $qty_get = $request->qty;
+
+            $select_qty = DB::table('tbdetil')->select('qty')->where('id', $id)->get();
+
+            $qty_database = $select_qty[0]->qty;
+
+            $qty = $qty_database-$qty_get;
+
+            if($qty<0){
+                return redirect('/idr')->with('alert','Qty tidak bisa dibawah 0');
+            }
+            $date = Carbon::now();
+
+            $date->toDateTimeString();
+            $tgl_kembali = $date->format('Y-m-d H:i:s');
+
+            $data = array(
+                    'qty'=>$qty,
+                    'tgl_kembali'=>$tgl_kembali,
+            );
+            DB::table('tbdetil')->where('id', $id)->update($data);
+            
+
+            $kodbar = DB::table('tbdetil')->select('kodebarang')->where('id', $id)->get();
+
+            $kodebarang = $kodbar[0]->kodebarang;
+
+            
+            $select_item = DB::table('tbbarang')->select('*')->where('kodebarang', $kodebarang)->get();
+
+            $qty_item = $select_item[0]->qty;
+
+            $qty_up_item = $qty_item+$qty_get;
+
+            $qtyarray = array(
+                    'qty'=>$qty_up_item
+            );
+           
+            DB::table('tbbarang')->where('kodebarang', $kodebarang)->update($qtyarray);
+
+            $statusa = "sudah";
+
+            $statusarr = array(
+                    'status'=>$statusa
+            );
+            if($qty<=0){
+                DB::table('tbdetil')->where('id',$id)->update($statusarr);
+            }
+            
+            return redirect('/idr')->with('alert','Berhasil');
+
+        }
     }
 
     /**

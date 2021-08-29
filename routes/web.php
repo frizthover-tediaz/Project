@@ -44,3 +44,11 @@ Route::get('/iden', function(){
 });
 
 Route::post('/idem', [Scanner::class, 'storem']);
+
+Route::get('/idr', function(){
+	return view('idr');
+});
+
+Route::post('/ider', [Scanner::class, 'storer']);
+
+Route::post('reman', [Scanner::class, 'storen']);

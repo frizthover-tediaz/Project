@@ -1,7 +1,7 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-	<title>Manual</title>
+	<title>Return</title>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
@@ -23,28 +23,36 @@
 			        <a class="nav-link active" href="#"><img src="img/logo.png"></a>
 	     	    </li>
 			</ul>
+			<form id="form-e" method="POST" action="{{ url('/ide') }}">
+				@csrf
 			<ul class="navbar-nav ml-auto">
 			    <li class="nav-item">
-			        <a class="nav-link" href="{{ url('/') }}"><input type="button" name="otomatis" id="otomatis" value="Otomatis" class="buttonnav"></a>
+			       <button name="valid" id="valid" value="Manual" class="buttonnav">Manual</button>
+			    </li>
+			    <li class="nav-item">
+			        <button name="valid" id="valid" value="Otomatis" class="buttonnav">Otomatis</button>
 			    </li>
 			</ul>
+			</form>
+
 		</nav>
 	<div class="main-content">
 	    <center>
 	    	<div class="border">
 	    		<div class="mcontent">
-	    			<form action="{{ url('/man') }}" method="POST">
+	    			<form action="{{ url('/reman') }}" method="POST">
 	    				@csrf
+	    				<input type="hidden" name="kode_user" id="kode_user" value="{{ $scan['kode_user'] }}">
 		    			<table style="width: 100%">
 		    				<tr>
-		    					<td>Kode Barang</td>
+		    					<td>Id</td>
 		    					<td>:</td>
 		    					<td class="width"></td>
 		    					<td>
-		    						<input class="forme" list="brow" name="kodebarang">
+		    						<input class="forme" list="brow" name="id">
 									<datalist id="brow">
-										@foreach($scan as $p)
-										<option value="{{ $p->kodebarang }}">{{ $p->nama }}</option>
+										@foreach($scan['brg'] as $p)
+										<option value="{{ $p->id }}">Kode Barang: {{ $p->kodebarang }} Nama: {{ $p->nama_barang }} Tgl Pinjam: {{ $p->tgl_pinjam }} Qty: {{ $p->qty }}</option>
 										@endforeach
 									</datalist>
 		    					</td>
@@ -67,4 +75,4 @@
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   </body>
-</html> -->
+</html>

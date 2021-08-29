@@ -27,10 +27,10 @@
 				@csrf
 				<ul class="navbar-nav ml-auto">
 				    <li class="nav-item">
-				        <button name="valid" id="valid" value="Manual" class="buttonnav">Manual</button>
+				        <button name="valid" id="valid" value="Otomatis" class="buttonnav">Otomatis</button>
 				    </li>
 				    <li class="nav-item">
-				        <button name="valid" id="valid" value="Kembalikan" class="buttonnav">Kembalikan</button>
+				        <button name="valid" id="valid" value="Manual" class="buttonnav">Manual</button>
 				    </li>
 				</ul>
 			</form>
@@ -49,7 +49,7 @@
 	        </div>
 	        <div class="col-md-6">
 	          <div class="centert">
-	          	<form id="form" method="POST" action="{{ url('/ident') }}">
+	          	<form id="form" method="POST" action="{{ url('/ider') }}">
 	          		@csrf
 	            	<input type="hidden" name="thevalue" id="thevalue" value="">
 	        	</form>
