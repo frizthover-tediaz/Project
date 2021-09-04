@@ -36,9 +36,14 @@
 			</form>
 		</nav>
 		<center>
-		@if(session('alert'))
+		@if(session('berhasil'))
 	        <div class="alert alert-success" style="width: 20%">
-	            {{ session('alert')}}
+	            {{ session('berhasil')}}
+	        </div>
+	    @endif
+	    @if(session('gagal'))
+	        <div class="alert alert-danger" style="width: 20%">
+	            {{ session('gagal')}}
 	        </div>
 	    @endif
 	    </center>

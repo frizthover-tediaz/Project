@@ -19,6 +19,7 @@ class CreateTbitemTable extends Migration
             $table->string('kodebarang', 50);
             $table->string('nama', 50);
             $table->integer('qty');
+            $table->string('lokasi', 50);
             $table->dateTime('tgl_pinjam', $presicion = 0)->nullable()->default(null);
             $table->dateTime('tgl_kembali', $presicion = 0)->nullable()->default(null);
         });

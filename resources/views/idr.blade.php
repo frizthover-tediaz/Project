@@ -41,6 +41,12 @@
 	            {{ session('alert')}}
 	        </div>
 	    @endif
+
+	    @if(session('gagal'))
+	        <div class="alert alert-danger" style="width: 20%">
+	            {{ session('gagal')}}
+	        </div>
+	    @endif
 	    </center>
 	<div class="main-content">
 	    <div class="row">

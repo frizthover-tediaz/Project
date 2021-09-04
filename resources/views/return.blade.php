@@ -49,10 +49,10 @@
 		    					<td>:</td>
 		    					<td class="width"></td>
 		    					<td>
-		    						<input class="forme" list="brow" name="id">
+		    						<input class="forme" list="brow" name="id" id="br">
 									<datalist id="brow">
 										@foreach($scan['brg'] as $p)
-										<option value="{{ $p->id }}">Kode Barang: {{ $p->kodebarang }} Nama: {{ $p->nama_barang }} Tgl Pinjam: {{ $p->tgl_pinjam }} Qty: {{ $p->qty }}</option>
+										<option value="{{ $p->id }}">Kode Barang: {{ $p->kodebarang }} Nama: {{ $p->nama_barang }} Qty: {{ $p->qty }} Lokasi: {{ $p->lokasi }}</option>
 										@endforeach
 									</datalist>
 		    					</td>
@@ -62,7 +62,16 @@
 		    					<td>Qty</td>
 		    					<td>:</td>
 		    					<td class="width"></td>
-		    					<td><input class="forme" type="number" name="qty" min="0" oninput="validity.valid||(value='');" value=""></td>
+		    					<td><input class="forme" type="number" id="qty" name="qty" min="0" oninput="validity.valid||(value='');" value=""></td>
+		    				</tr>
+		    				<tr class="height"></tr>
+		    				<tr>
+		    					<td></td>
+		    					<td></td>
+		    					<td class="width"></td>
+		    					<td>
+		    						<input type="checkbox" name="all" id="all" onchange="check()"> All
+		    					</td>
 		    				</tr>		
 		    			</table>
 		    			<div class="btns">
@@ -74,5 +83,6 @@
 	    </center>
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="js/check.js"></script>
   </body>
 </html>

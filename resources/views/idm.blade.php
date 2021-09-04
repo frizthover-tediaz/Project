@@ -35,6 +35,13 @@
 				</ul>
 			</form>
 		</nav>
+		<center>
+			@if(session('gagal'))
+	        <div class="alert alert-danger" style="width: 25%">
+	            {{ session('gagal')}}
+	        </div>
+	    	@endif
+		</center>
 	<div class="main-content">
 	    <div class="row">
 	        <div class="col-md-6">

@@ -17,6 +17,7 @@ class CreateTbbarangTable extends Migration
             $table->string('kodebarang', 50);
             $table->integer('qty');
             $table->string('nama', 50);
+            $table->string('lokasi', 50);
         });
     }
 
