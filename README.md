@@ -14,4 +14,4 @@ Before you scan please read below:
 
 7. Finish
 
-8. If you have a problem tell me in (https://github.com/frizthover-tediaz/Project)
+8. If you have a problem tell me in (https://github.com/frizthover-tediaz)
