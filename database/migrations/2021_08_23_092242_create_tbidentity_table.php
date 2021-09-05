@@ -17,7 +17,7 @@ class CreateTbidentityTable extends Migration
             $table->increments('id');
             $table->integer('kode_user');
             $table->string('nama', 50);
-            $table->string('kelas', 50);
+            $table->string('ket', 50);
         });
     }
 

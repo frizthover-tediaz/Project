@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTbsiswaTable extends Migration
+class CreateTbuserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateTbsiswaTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbsiswa', function (Blueprint $table) {
+        Schema::create('tbuser', function (Blueprint $table) {
             $table->integer('kode_user');
             $table->primary('nis');
             $table->string('nama', 50);
-            $table->string('kelas',50);
+            $table->string('ket',50);
         });
     }
 
@@ -28,6 +28,6 @@ class CreateTbsiswaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbsiswa');
+        Schema::dropIfExists('tbuser');
     }
 }

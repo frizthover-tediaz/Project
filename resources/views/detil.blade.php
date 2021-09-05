@@ -54,11 +54,11 @@
 			    			<input type="hidden" name="nama" value="{{ $data['nama'] }}">
 		    			</tr>
 		    			<tr>
-			    			<td>Kelas</td>
+			    			<td>Keterangan</td>
 			    			<td>:</td>
 			    			<td class="width"></td>
-			    			<td value="{{ $data['kelas'] }}" name="kelas">{{ $data['kelas'] }}</td>
-			    			<input type="hidden" name="kelas" value="{{ $data['kelas'] }}">
+			    			<td value="{{ $data['ket'] }}" name="ket">{{ $data['ket'] }}</td>
+			    			<input type="hidden" name="ket" value="{{ $data['ket'] }}">
 		    			</tr>
 		    			<tr class="height"></tr>
 		    			<tr class="height"></tr>

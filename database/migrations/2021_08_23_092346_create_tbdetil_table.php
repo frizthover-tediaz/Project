@@ -16,8 +16,8 @@ class CreateTbdetilTable extends Migration
         Schema::create('tbdetil', function (Blueprint $table) {
             $table->increments('id');
             $table->string('kode_user', 50);
-            $table->string('nama_siswa', 50);
-            $table->string('kelas', 50);
+            $table->string('nama_user', 50);
+            $table->string('ket', 50);
             $table->string('kodebarang', 50);
             $table->string('nama_barang', 50);
             $table->integer('qty');

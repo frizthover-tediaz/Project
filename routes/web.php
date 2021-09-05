@@ -27,7 +27,7 @@ Route::get('/barang', function(){
 
 Route::post('/ident', [Scanner::class, 'store1']);
 
-Route::get('/detil', [Scanner::class, 'index']);
+// Route::get('/detil', [Scanner::class, 'index']);
 
 Route::post('/done', [Scanner::class, 'store2']);
 

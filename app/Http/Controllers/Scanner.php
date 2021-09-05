@@ -31,88 +31,6 @@ class Scanner extends Controller
 
         return $valid;
     }
-    public function index()
-    {
-        $ok = DB::table('tbitem')
-            ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
-            ->select('tbidentity.nama', 'tbidentity.kelas','tbitem.tgl_pinjam')
-            ->distinct()
-            ->get();
-
-        $brg = DB::table('tbitem')
-            ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
-            ->select('tbidentity.nama','tbitem.kodebarang')
-            ->distinct()
-            ->get();
-
-        $brg2 = DB::table('tbitem')
-            ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
-            ->select('tbitem.nama')
-            ->get();
-
-        $qty = DB::table('tbitem')
-            ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
-            ->select('tbidentity.nama','tbitem.nama','tbitem.qty')
-            ->distinct()
-            ->get();
-
-
-        $b = "";
-        $brgcount = count($brg);
-
-        for ($i=0; $i < $brgcount ; $i++) { 
-            $b .= $brg[$i]->kodebarang . ",";
-        }
-
-        $leng = strlen($b);
-
-        $mat = Str::substr($b, 0, $leng - 1);
-
-        $nama = $ok[0]->nama;
-        $tgl_pinjam = $ok[0]->tgl_pinjam;
-        // $tgl_kembali = $ok[0]->tgl_kembali;
-        $kelas = $ok[0]->kelas;
-
-        $brg2count = count($brg2); 
-
-        $s = "";
-        for ($i=0; $i < $brg2count ; $i++) { 
-            $s .= $brg2[$i]->nama . ",";
-        }
-
-        $len = strlen($s);
-
-        $match = Str::substr($s, 0, $len - 1);
-
-        $ex = explode(',', $match);
-
-
-        $qtyc = count($qty);
-
-
-        $q = "";
-        for ($i=0; $i < $qtyc ; $i++) { 
-            $q .= $qty[$i]->qty . ",";
-        }
-
-        $le = strlen($q);
-
-        $ma = Str::substr($q, 0, $le - 1);
-
-        $e = explode(',', $ma);
-
-        $data = array(
-                'nama'=> $nama,
-                'kelas'=> $kelas,
-                'kodebarang'=>$mat,
-                'namabrg'=>$ex,
-                'tgl_pinjam'=> $tgl_pinjam,
-                'param'=>$brgcount,
-                'qty'=>$e
-        );
-
-        return view('detil', ['data'=>$data]);
-    }
 
     // public function index2()
     // {
@@ -144,74 +62,264 @@ class Scanner extends Controller
     public function store(Request $request)
     {
         $kode_user = $request->kode_user;
+        $kodebarang = $request->thevalue;
 
-        $cari = DB::table('tbitem')->select('qty')->where('kodebarang', $request->thevalue)->get();
+        $se_brg = DB::table('tbbarang')
+            ->select('*')
+            ->where('kodebarang', $kodebarang)
+            ->get();
+
+        $c_brg = count($se_brg);
+
+        if($c_brg!=0){
+
+            $cari = DB::table('tbitem')
+                ->select('qty')
+                ->where('kodebarang', $request->thevalue)
+                ->where('kode_user', $kode_user)
+                ->get();
+
+            $count = count($cari);
+
+            if($count!="0"){
+
+                $kodebarang = $request->thevalue;
+
+                $date = Carbon::now();
+
+                $date->toDateTimeString();
+                // $daysToAdd = 7;
+                $tgl_pinjam = $date->format('Y-m-d H:i:s');
+
+                // $tgl_kembali = $date->addDays($daysToAdd)->format('Y-m-d H:i:s');
+
+                $qty = DB::table('tbitem')
+                    ->select('qty')
+                    ->where('kodebarang', $request->thevalue)
+                    ->where('kode_user', $kode_user)
+                    ->get();
+
+                $qtys = $qty[0]->qty;
+
+                $qtyval = $qtys+1;
+
+                $data = array(
+                    'qty'=> $qtyval,
+                    'tgl_pinjam'=> $tgl_pinjam,
+                );
+
+                DB::table('tbitem')->where('kodebarang', $kodebarang)->where('kode_user', $kode_user)->update($data);
 
 
-        $count = count($cari);
+                
+                $ok = DB::table('tbitem')
+                ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                ->select('tbidentity.nama', 'tbidentity.ket','tbitem.tgl_pinjam')
+                ->where('tbidentity.kode_user', $kode_user)
+                ->distinct()
+                ->get();
 
-        if($count!="0"){
 
-            $kodebarang = $request->thevalue;
+                $brg = DB::table('tbitem')
+                    ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                    ->select('tbidentity.nama','tbitem.kodebarang')
+                    ->where('tbidentity.kode_user', $kode_user)
+                    ->distinct()
+                    ->get();
 
-            $date = Carbon::now();
+                $brg2 = DB::table('tbitem')
+                    ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                    ->select('tbitem.nama')
+                    ->where('tbidentity.kode_user', $kode_user)
+                    ->get();
 
-            $date->toDateTimeString();
-            // $daysToAdd = 7;
-            $tgl_pinjam = $date->format('Y-m-d H:i:s');
+                $qty = DB::table('tbitem')
+                    ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                    ->select('tbidentity.nama','tbitem.nama','tbitem.qty')
+                    ->where('tbidentity.kode_user', $kode_user)
+                    ->distinct()
+                    ->get();
 
-            // $tgl_kembali = $date->addDays($daysToAdd)->format('Y-m-d H:i:s');
 
-            $qty = DB::table('tbitem')->select('qty')->where('kodebarang', $request->thevalue)->get();
+                $b = "";
+                $brgcount = count($brg);
 
-            $qtys = $qty[0]->qty;
+                for ($i=0; $i < $brgcount ; $i++) { 
+                    $b .= $brg[$i]->kodebarang . ",";
+                }
 
-            $qtyval = $qtys+1;
+                $leng = strlen($b);
 
-            $data = array(
-                'qty'=> $qtyval,
-                'tgl_pinjam'=> $tgl_pinjam,
-            );
+                $mat = Str::substr($b, 0, $leng - 1);
 
-            DB::table('tbitem')->where('kodebarang', $kodebarang)->update($data);
-            
-            return redirect('/detil');
+                $nama = $ok[0]->nama;
+                $tgl_pinjam = $ok[0]->tgl_pinjam;
+                // $tgl_kembali = $ok[0]->tgl_kembali;
+                $ket = $ok[0]->ket;
 
+                $brg2count = count($brg2); 
+
+                $s = "";
+                for ($i=0; $i < $brg2count ; $i++) { 
+                    $s .= $brg2[$i]->nama . ",";
+                }
+
+                $len = strlen($s);
+
+                $match = Str::substr($s, 0, $len - 1);
+
+                $ex = explode(',', $match);
+
+
+                $qtyc = count($qty);
+
+
+                $q = "";
+                for ($i=0; $i < $qtyc ; $i++) { 
+                    $q .= $qty[$i]->qty . ",";
+                }
+
+                $le = strlen($q);
+
+                $ma = Str::substr($q, 0, $le - 1);
+
+                $e = explode(',', $ma);
+
+                $data = array(
+                        'nama'=> $nama,
+                        'ket'=> $ket,
+                        'kodebarang'=>$mat,
+                        'namabrg'=>$ex,
+                        'tgl_pinjam'=> $tgl_pinjam,
+                        'param'=>$brgcount,
+                        'qty'=>$e
+                );
+
+                return view('detil', ['data'=>$data]);
+
+            }else{
+                $kodebarang = $request->thevalue;
+
+                $nama = DB::table('tbbarang')->select('nama')->where('kodebarang', $request->thevalue)->get();
+
+                $lokasi = DB::table('tbbarang')->select('lokasi')->where('kodebarang', $request->thevalue)->get();
+
+
+                $namas = $nama[0]->nama;
+                $lokasis = $lokasi[0]->lokasi;
+
+                $date = Carbon::now();
+
+                $date->toDateTimeString();
+                // $daysToAdd = 7;
+                $tgl_pinjam = $date->format('Y-m-d H:i:s');
+
+                // $tgl_kembali = $date->addDays($daysToAdd)->format('Y-m-d H:i:s');
+                $tgl_kembali = null;
+
+                $qty = 1;
+
+                $data = array(
+                    'kode_user'=> $kode_user,
+                    'kodebarang'=> $kodebarang,
+                    'nama'=> $namas,
+                    'qty'=>$qty,
+                    'lokasi'=>$lokasis,
+                    'tgl_pinjam'=> $tgl_pinjam,
+                    'tgl_kembali'=> $tgl_kembali
+                );
+
+                DB::table('tbitem')->insert($data);
+
+
+                
+                $ok = DB::table('tbitem')
+                ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                ->select('tbidentity.nama', 'tbidentity.ket','tbitem.tgl_pinjam')
+                ->where('tbidentity.kode_user', $kode_user)
+                ->distinct()
+                ->get();
+
+
+                $brg = DB::table('tbitem')
+                    ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                    ->select('tbidentity.nama','tbitem.kodebarang')
+                    ->where('tbidentity.kode_user', $kode_user)
+                    ->distinct()
+                    ->get();
+
+                $brg2 = DB::table('tbitem')
+                    ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                    ->select('tbitem.nama')
+                    ->where('tbidentity.kode_user', $kode_user)
+                    ->get();
+
+                $qty = DB::table('tbitem')
+                    ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                    ->select('tbidentity.nama','tbitem.nama','tbitem.qty')
+                    ->where('tbidentity.kode_user', $kode_user)
+                    ->distinct()
+                    ->get();
+
+
+                $b = "";
+                $brgcount = count($brg);
+
+                for ($i=0; $i < $brgcount ; $i++) { 
+                    $b .= $brg[$i]->kodebarang . ",";
+                }
+
+                $leng = strlen($b);
+
+                $mat = Str::substr($b, 0, $leng - 1);
+
+                $nama = $ok[0]->nama;
+                $tgl_pinjam = $ok[0]->tgl_pinjam;
+                // $tgl_kembali = $ok[0]->tgl_kembali;
+                $ket = $ok[0]->ket;
+
+                $brg2count = count($brg2); 
+
+                $s = "";
+                for ($i=0; $i < $brg2count ; $i++) { 
+                    $s .= $brg2[$i]->nama . ",";
+                }
+
+                $len = strlen($s);
+
+                $match = Str::substr($s, 0, $len - 1);
+
+                $ex = explode(',', $match);
+
+
+                $qtyc = count($qty);
+
+
+                $q = "";
+                for ($i=0; $i < $qtyc ; $i++) { 
+                    $q .= $qty[$i]->qty . ",";
+                }
+
+                $le = strlen($q);
+
+                $ma = Str::substr($q, 0, $le - 1);
+
+                $e = explode(',', $ma);
+
+                $data = array(
+                        'nama'=> $nama,
+                        'ket'=> $ket,
+                        'kodebarang'=>$mat,
+                        'namabrg'=>$ex,
+                        'tgl_pinjam'=> $tgl_pinjam,
+                        'param'=>$brgcount,
+                        'qty'=>$e
+                );
+
+                return view('detil', ['data'=>$data]);
+            }
         }else{
-            $kodebarang = $request->thevalue;
-
-            $nama = DB::table('tbbarang')->select('nama')->where('kodebarang', $request->thevalue)->get();
-
-            $lokasi = DB::table('tbbarang')->select('lokasi')->where('kodebarang', $request->thevalue)->get();
-
-
-            $namas = $nama[0]->nama;
-            $lokasis = $lokasi[0]->lokasi;
-
-            $date = Carbon::now();
-
-            $date->toDateTimeString();
-            // $daysToAdd = 7;
-            $tgl_pinjam = $date->format('Y-m-d H:i:s');
-
-            // $tgl_kembali = $date->addDays($daysToAdd)->format('Y-m-d H:i:s');
-            $tgl_kembali = null;
-
-            $qty = 1;
-
-            $data = array(
-                'kode_user'=> $kode_user,
-                'kodebarang'=> $kodebarang,
-                'nama'=> $namas,
-                'qty'=>$qty,
-                'lokasi'=>$lokasis,
-                'tgl_pinjam'=> $tgl_pinjam,
-                'tgl_kembali'=> $tgl_kembali
-            );
-
-            DB::table('tbitem')->insert($data);
-            
-            return redirect('/detil');
+            return redirect('/')->with('brg', 'brg');
         }
     }
 
@@ -219,37 +327,47 @@ class Scanner extends Controller
     {
         $kode_user = $request->thevalue;
 
-        $select = DB::table('tbsiswa')->select('nama','kelas')->where('kode_user', $kode_user)->get();
+        $select = DB::table('tbuser')->select('nama','ket')->where('kode_user', $kode_user)->get();
 
-        $nama = $select[0]->nama;
+        $count = count($select);
+        if($count>0){
+            $nama = $select[0]->nama;
 
-        $kelas = $select[0]->kelas;
+            $ket = $select[0]->ket;
 
-        $data = array(
-                'kode_user'=> $kode_user,
-                'nama'=> $nama,
-                'kelas'=>$kelas
-            );
+            $data = array(
+                    'kode_user'=> $kode_user,
+                    'nama'=> $nama,
+                    'ket'=>$ket
+                );
 
-        DB::table('tbidentity')->insert($data);
+            DB::table('tbidentity')->insert($data);
+            
+            return view('index', ['data'=>$data]);
+        }else{
+            return redirect('/')->with('iden', 'iden');
+        }
+
+
         
-        return view('index', ['data'=>$data]);
     }
 
     public function store2(Request $request)
     {
         $nama_siswa = $request->nama;
-        $kelas = $request->kelas;
+        $ket = $request->ket;
 
         $brg2 = DB::table('tbitem')
             ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
             ->select('tbidentity.nama', 'tbitem.nama')
+            ->where('tbidentity.nama', $nama_siswa)
             ->distinct()
             ->get();
 
         $cari_kodeuser = DB::table('tbitem')
             ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
             ->select('tbidentity.nama', 'tbitem.kode_user')
+            ->where('tbidentity.nama', $nama_siswa)
             ->distinct()
             ->get();
 
@@ -267,6 +385,7 @@ class Scanner extends Controller
             $kodbar = DB::table('tbitem')
                     ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
                     ->select('tbidentity.nama', 'tbitem.nama', 'tbitem.kodebarang')
+                    ->where('tbidentity.nama', $nama_siswa)
                     ->distinct()
                     ->get();
 
@@ -279,6 +398,7 @@ class Scanner extends Controller
             $select_lokasi = DB::table('tbitem')
                     ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
                     ->select('tbidentity.nama', 'tbitem.nama', 'tbitem.lokasi')
+                    ->where('tbidentity.nama', $nama_siswa)
                     ->distinct()
                     ->get();
 
@@ -291,6 +411,7 @@ class Scanner extends Controller
             $tgl = DB::table('tbitem')
                 ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
                 ->select('tbidentity.nama', 'tbitem.tgl_pinjam')
+                ->where('tbidentity.nama', $nama_siswa)
                 ->distinct()
                 ->get();
 
@@ -300,6 +421,7 @@ class Scanner extends Controller
             $qty = DB::table('tbitem')
                 ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
                 ->select('tbitem.kodebarang','tbidentity.nama', 'tbitem.qty')
+                ->where('tbidentity.nama', $nama_siswa)
                 ->distinct()
                 ->get();
 
@@ -322,12 +444,12 @@ class Scanner extends Controller
             $qtybaru = $qtyb-$qtys;
 
             if($qtybaru<0){
-                 return redirect('/')->with('gagal','Qty tidak bisa dibawah 0');
+                 return redirect('/')->with('gagal','gagal');
             }
             $data = array(
                     'kode_user'=>$kode_user,
                     'nama_user'=> $nama_siswa,
-                    'kelas'=> $kelas,
+                    'ket'=>$ket,
                     'kodebarang'=>$kodebarang,
                     'nama_barang'=>$nama_barang,
                     'qty'=>$qtys,
@@ -346,121 +468,321 @@ class Scanner extends Controller
 
         };
 
-        DB::table('tbitem')->truncate();
-        DB::table('tbidentity')->truncate();
+        DB::table('tbitem')->where('kode_user', $kode_user)->delete();
+        DB::table('tbidentity')->where('kode_user', $kode_user)->delete();
 
-        return redirect('/')->with('berhasil','Berhasil');
+        return redirect('/')->with('berhasil','berhasil');
     }
 
     public function storem(Request $request)
     {
         $kode_user = $request->thevalue;
 
-        $select = DB::table('tbsiswa')->select('nama','kelas')->where('kode_user', $kode_user)->get();
+        $select = DB::table('tbuser')
+            ->select('nama','ket')
+            ->where('kode_user', $kode_user)
+            ->get();
         
-        $scanner = DB::table('tbbarang')
+        $count = count($select);
+
+        if($count>0){
+            $scanner = DB::table('tbbarang')
                 ->select('*')
                 ->get();
 
-        $nama = $select[0]->nama;
+            $nama = $select[0]->nama;
 
-        $kelas = $select[0]->kelas;
+            $ket = $select[0]->ket;
 
-        $data = array(
-                'kode_user'=> $kode_user,
-                'nama'=> $nama,
-                'kelas'=>$kelas
+            $data = array(
+                    'kode_user'=> $kode_user,
+                    'nama'=> $nama,
+                    'ket'=>$ket
+                );
+
+            DB::table('tbidentity')->insert($data);
+
+            $p = count($scanner);
+
+            $scan = array(
+                    'kode_user'=>$kode_user,
+                    'brg'=>$scanner,
             );
 
-        DB::table('tbidentity')->insert($data);
+            return view('manual', ['scan'=>$scan]);
 
-        $p = count($scanner);
-
-        $scan = array(
-                'kode_user'=>$kode_user,
-                'brg'=>$scanner,
-        );
-
-        // return $scan;
-        return view('manual', ['scan'=>$scan]);
-
-        // return view('manual')->with('scan', $scan);
+        }else{
+            return redirect('/iden')->with('iden','iden');
+        }
+        
     }
 
     public function store3(Request $request)
     {
         $kodebarang = $request->kodebarang;
-
-        $select_qt = DB::table('tbbarang')->select('*')->where('kodebarang', $kodebarang)->get();
-
-        $pick_qty = $select_qt[0]->qty;
-
-        $qty_get = $request->qty;
-
-        if($pick_qty<$qty_get){
-            $alert = "Qty melebihi stok yang ada";
-            return redirect('iden')->with('gagal', $alert);
-        }
-
         $kode_user = $request->kode_user;
 
-        $select_if = DB::table('tbitem')->select('*')->where('kodebarang', $kodebarang)->get();
+        $select_qt = DB::table('tbbarang')
+                ->select('*')
+                ->where('kodebarang', $kodebarang)
+                ->get();
 
-        $select_count = count($select_if);
+        $count_qt = count($select_qt);
+        if($count_qt!=0){
 
-        if($select_count!=0){
-
+            $pick_qty = $select_qt[0]->qty;
             $qty_get = $request->qty;
 
-            $select_qty = DB::table('tbitem')->select('qty')->where('kodebarang', $kodebarang)->get();
+            if($pick_qty<$qty_get){
+                return redirect('iden')->with('gagal', 'gagal');
+            }
 
-            $qty_database = $select_qty[0]->qty;
 
-            $qty = $qty_get+$qty_database;
+            $select_if = DB::table('tbitem')
+                ->select('*')
+                ->where('kodebarang', $kodebarang)
+                ->where('kode_user', $kode_user)
+                ->get();
 
-            $date = Carbon::now();
+            $select_count = count($select_if);
 
-            $date->toDateTimeString();
-            $tgl_pinjam = $date->format('Y-m-d H:i:s');
+            if($select_count!=0){
 
-            $data = array(
-                    'qty'=>$qty,
-                    'tgl_pinjam'=>$tgl_pinjam,
-            );
+                $qty_get = $request->qty;
 
-            DB::table('tbitem')->where('kodebarang', $kodebarang)->update($data);
-            
-            return redirect('/detil');
+                $select_qty = DB::table('tbitem')
+                    ->select('qty')
+                    ->where('kodebarang', $kodebarang)
+                    ->where('kode_user', $kode_user)
+                    ->get();
 
+                $qty_database = $select_qty[0]->qty;
+
+                $qty = $qty_get+$qty_database;
+
+                $date = Carbon::now();
+
+                $date->toDateTimeString();
+                $tgl_pinjam = $date->format('Y-m-d H:i:s');
+
+                $data = array(
+                        'qty'=>$qty,
+                        'tgl_pinjam'=>$tgl_pinjam,
+                );
+
+                DB::table('tbitem')
+                    ->where('kodebarang', $kodebarang)
+                    ->where('kode_user', $kode_user)
+                    ->update($data);
+
+                
+                $ok = DB::table('tbitem')
+                ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                ->select('tbidentity.nama', 'tbidentity.ket','tbitem.tgl_pinjam')
+                ->where('tbidentity.kode_user', $kode_user)
+                ->distinct()
+                ->get();
+
+
+                $brg = DB::table('tbitem')
+                    ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                    ->select('tbidentity.nama','tbitem.kodebarang')
+                    ->where('tbidentity.kode_user', $kode_user)
+                    ->distinct()
+                    ->get();
+
+                $brg2 = DB::table('tbitem')
+                    ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                    ->select('tbitem.nama')
+                    ->where('tbidentity.kode_user', $kode_user)
+                    ->get();
+
+                $qty = DB::table('tbitem')
+                    ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                    ->select('tbidentity.nama','tbitem.nama','tbitem.qty')
+                    ->where('tbidentity.kode_user', $kode_user)
+                    ->distinct()
+                    ->get();
+
+
+                $b = "";
+                $brgcount = count($brg);
+
+                for ($i=0; $i < $brgcount ; $i++) { 
+                    $b .= $brg[$i]->kodebarang . ",";
+                }
+
+                $leng = strlen($b);
+
+                $mat = Str::substr($b, 0, $leng - 1);
+
+                $nama = $ok[0]->nama;
+                $tgl_pinjam = $ok[0]->tgl_pinjam;
+                // $tgl_kembali = $ok[0]->tgl_kembali;
+                $ket = $ok[0]->ket;
+
+                $brg2count = count($brg2); 
+
+                $s = "";
+                for ($i=0; $i < $brg2count ; $i++) { 
+                    $s .= $brg2[$i]->nama . ",";
+                }
+
+                $len = strlen($s);
+
+                $match = Str::substr($s, 0, $len - 1);
+
+                $ex = explode(',', $match);
+
+
+                $qtyc = count($qty);
+
+
+                $q = "";
+                for ($i=0; $i < $qtyc ; $i++) { 
+                    $q .= $qty[$i]->qty . ",";
+                }
+
+                $le = strlen($q);
+
+                $ma = Str::substr($q, 0, $le - 1);
+
+                $e = explode(',', $ma);
+
+                $data = array(
+                        'nama'=> $nama,
+                        'ket'=> $ket,
+                        'kodebarang'=>$mat,
+                        'namabrg'=>$ex,
+                        'tgl_pinjam'=> $tgl_pinjam,
+                        'param'=>$brgcount,
+                        'qty'=>$e
+                );
+
+                return view('detil', ['data'=>$data]);
+
+            }else{
+                $qty = $request->qty;
+
+                $select_nama = DB::table('tbbarang')
+                    ->select('nama')
+                    ->where('kodebarang', $kodebarang)
+                    ->get();
+
+                $select_lokasi = DB::table('tbbarang')
+                    ->select('lokasi')
+                    ->where('kodebarang', $kodebarang)
+                    ->get();
+
+                $nama_barang = $select_nama[0]->nama;
+                $lokasi = $select_lokasi[0]->lokasi;
+
+                $date = Carbon::now();
+
+                $date->toDateTimeString();
+                $tgl_pinjam = $date->format('Y-m-d H:i:s');
+
+                $tgl_kembali = null;
+
+                $data = array(
+                        'kode_user'=>$kode_user,
+                        'kodebarang'=>$kodebarang,
+                        'nama'=>$nama_barang,
+                        'qty'=>$qty,
+                        'lokasi'=>$lokasi,
+                        'tgl_pinjam'=>$tgl_pinjam,
+                        'tgl_kembali'=>$tgl_kembali
+                );
+
+                DB::table('tbitem')->insert($data);
+
+                $ok = DB::table('tbitem')
+                ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                ->select('tbidentity.nama', 'tbidentity.ket','tbitem.tgl_pinjam')
+                ->where('tbidentity.kode_user', $kode_user)
+                ->distinct()
+                ->get();
+
+
+                $brg = DB::table('tbitem')
+                    ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                    ->select('tbidentity.nama','tbitem.kodebarang')
+                    ->where('tbidentity.kode_user', $kode_user)
+                    ->distinct()
+                    ->get();
+
+                $brg2 = DB::table('tbitem')
+                    ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                    ->select('tbitem.nama')
+                    ->where('tbidentity.kode_user', $kode_user)
+                    ->get();
+
+                $qty = DB::table('tbitem')
+                    ->join('tbidentity', 'tbitem.kode_user', '=', 'tbidentity.kode_user')
+                    ->select('tbidentity.nama','tbitem.nama','tbitem.qty')
+                    ->where('tbidentity.kode_user', $kode_user)
+                    ->distinct()
+                    ->get();
+
+
+                $b = "";
+                $brgcount = count($brg);
+
+                for ($i=0; $i < $brgcount ; $i++) { 
+                    $b .= $brg[$i]->kodebarang . ",";
+                }
+
+                $leng = strlen($b);
+
+                $mat = Str::substr($b, 0, $leng - 1);
+
+                $nama = $ok[0]->nama;
+                $tgl_pinjam = $ok[0]->tgl_pinjam;
+                // $tgl_kembali = $ok[0]->tgl_kembali;
+                $ket = $ok[0]->ket;
+
+                $brg2count = count($brg2); 
+
+                $s = "";
+                for ($i=0; $i < $brg2count ; $i++) { 
+                    $s .= $brg2[$i]->nama . ",";
+                }
+
+                $len = strlen($s);
+
+                $match = Str::substr($s, 0, $len - 1);
+
+                $ex = explode(',', $match);
+
+
+                $qtyc = count($qty);
+
+
+                $q = "";
+                for ($i=0; $i < $qtyc ; $i++) { 
+                    $q .= $qty[$i]->qty . ",";
+                }
+
+                $le = strlen($q);
+
+                $ma = Str::substr($q, 0, $le - 1);
+
+                $e = explode(',', $ma);
+
+                $data = array(
+                        'nama'=> $nama,
+                        'ket'=> $ket,
+                        'kodebarang'=>$mat,
+                        'namabrg'=>$ex,
+                        'tgl_pinjam'=> $tgl_pinjam,
+                        'param'=>$brgcount,
+                        'qty'=>$e
+                );
+
+                return view('detil', ['data'=>$data]);
+            }
         }else{
-            $qty = $request->qty;
-
-            $select_nama = DB::table('tbbarang')->select('nama')->where('kodebarang', $kodebarang)->get();
-            $select_lokasi = DB::table('tbbarang')->select('lokasi')->where('kodebarang', $kodebarang)->get();
-
-            $nama_barang = $select_nama[0]->nama;
-            $lokasi = $select_lokasi[0]->lokasi;
-
-            $date = Carbon::now();
-
-            $date->toDateTimeString();
-            $tgl_pinjam = $date->format('Y-m-d H:i:s');
-
-            $tgl_kembali = null;
-
-            $data = array(
-                    'kode_user'=>$kode_user,
-                    'kodebarang'=>$kodebarang,
-                    'nama'=>$nama_barang,
-                    'qty'=>$qty,
-                    'lokasi'=>$lokasi,
-                    'tgl_pinjam'=>$tgl_pinjam,
-                    'tgl_kembali'=>$tgl_kembali
-            );
-
-            DB::table('tbitem')->insert($data);
-
-            return redirect('/detil');
+            return redirect('/iden')->with('brg', 'brg');
         }
         
     }
@@ -469,22 +791,28 @@ class Scanner extends Controller
     {
         $kode_user = $request->thevalue;
 
-        $select = DB::table('tbsiswa')->select('nama','kelas')->where('kode_user', $kode_user)->get();
+        $select = DB::table('tbuser')->select('nama','ket')->where('kode_user', $kode_user)->get();
         
-        $scanner = DB::table('tbdetil')
+        $count = count($select);
+
+        if($count>0){
+            $scanner = DB::table('tbdetil')
                 ->select('*')
                 ->where('kode_user', $kode_user)
                 ->where('status', "belum")
                 ->get();
 
 
-        $scan = array(
-                'kode_user'=>$kode_user,
-                'brg'=>$scanner,
-        );
+            $scan = array(
+                    'kode_user'=>$kode_user,
+                    'brg'=>$scanner,
+            );
 
-        // return $scan;
-        return view('return', ['scan'=>$scan]);
+            return view('return', ['scan'=>$scan]);
+        }else{
+            return redirect('/idr')->with('iden','iden');
+        }
+        
     }
 
     public function storen(Request $request)
@@ -493,122 +821,135 @@ class Scanner extends Controller
         $kode_user = $request->kode_user;
         $all = $request->all;
 
-        if($all==""){
-            $select_if = DB::table('tbdetil')->select('*')->where('id', $id)->get();
+        $s_ids = DB::table('tbdetil')
+            ->select('id', 'status')
+            ->where('id', $id)
+            ->where('status', "belum")
+            ->where('kode_user', $kode_user)
+            ->get();
 
-            $select_count = count($select_if);
+        $c_ids = count($s_ids);
 
-            if($select_count!=0){
+            if($all==""){
+                if($c_ids!=0){
+                    $select_if = DB::table('tbdetil')->select('*')->where('id', $id)->get();
 
-                $qty_get = $request->qty;
+                    $select_count = count($select_if);
 
-                $select_qty = DB::table('tbdetil')->select('qty')->where('id', $id)->get();
+                    if($select_count!=0){
 
-                $qty_database = $select_qty[0]->qty;
+                        $qty_get = $request->qty;
 
-                $qty = $qty_database-$qty_get;
+                        $select_qty = DB::table('tbdetil')->select('qty')->where('id', $id)->get();
 
-                if($qty<0){
-                    return redirect('/idr')->with('gagal','Qty tidak bisa dibawah 0');
+                        $qty_database = $select_qty[0]->qty;
+
+                        $qty = $qty_database-$qty_get;
+
+                        if($qty<0){
+                            return redirect('/idr')->with('gagal','gagal');
+                        }
+                        $date = Carbon::now();
+
+                        $date->toDateTimeString();
+                        $tgl_kembali = $date->format('Y-m-d H:i:s');
+
+                        $data = array(
+                                'qty'=>$qty,
+                                'tgl_kembali'=>$tgl_kembali,
+                        );
+                        DB::table('tbdetil')->where('id', $id)->update($data);
+                        
+
+                        $kodbar = DB::table('tbdetil')->select('kodebarang')->where('id', $id)->get();
+
+                        $kodebarang = $kodbar[0]->kodebarang;
+
+                        
+                        $select_item = DB::table('tbbarang')->select('*')->where('kodebarang', $kodebarang)->get();
+
+                        $qty_item = $select_item[0]->qty;
+
+                        $qty_up_item = $qty_item+$qty_get;
+
+                        $qtyarray = array(
+                                'qty'=>$qty_up_item
+                        );
+                       
+                        DB::table('tbbarang')->where('kodebarang', $kodebarang)->update($qtyarray);
+
+                        $statusa = "sudah";
+
+                        $statusarr = array(
+                                'status'=>$statusa
+                        );
+                        if($qty<=0){
+                            DB::table('tbdetil')->where('id',$id)->update($statusarr);
+                        }
+                        
+                        return redirect('/idr')->with('berhasil','berhasil');
+
+                    }else{
+                        return redirect('/idr')->with('gagal', 'gagal');
+                    }
+                }else{
+                    return redirect('/idr')->with('id', 'id');
                 }
-                $date = Carbon::now();
-
-                $date->toDateTimeString();
-                $tgl_kembali = $date->format('Y-m-d H:i:s');
-
-                $data = array(
-                        'qty'=>$qty,
-                        'tgl_kembali'=>$tgl_kembali,
-                );
-                DB::table('tbdetil')->where('id', $id)->update($data);
-                
-
-                $kodbar = DB::table('tbdetil')->select('kodebarang')->where('id', $id)->get();
-
-                $kodebarang = $kodbar[0]->kodebarang;
-
-                
-                $select_item = DB::table('tbbarang')->select('*')->where('kodebarang', $kodebarang)->get();
-
-                $qty_item = $select_item[0]->qty;
-
-                $qty_up_item = $qty_item+$qty_get;
-
-                $qtyarray = array(
-                        'qty'=>$qty_up_item
-                );
-               
-                DB::table('tbbarang')->where('kodebarang', $kodebarang)->update($qtyarray);
-
-                $statusa = "sudah";
-
-                $statusarr = array(
-                        'status'=>$statusa
-                );
-                if($qty<=0){
-                    DB::table('tbdetil')->where('id',$id)->update($statusarr);
-                }
-                
-                return redirect('/idr')->with('alert','Berhasil');
-
             }else{
-                return redirect('/idr')->with('gagal', 'Gagal');
-            }
-        }else{
-            $select = DB::table('tbdetil')
-                        ->select('id', 'kode_user', 'nama_user', 'kodebarang', 'qty')
-                        ->where('status', "belum")
-                        ->where('kode_user', $kode_user)
-                        ->get();
+                    $select = DB::table('tbdetil')
+                                ->select('id', 'kode_user', 'nama_user', 'kodebarang', 'qty')
+                                ->where('status', "belum")
+                                ->where('kode_user', $kode_user)
+                                ->get();
 
-            $count = count($select);
+                    $count = count($select);
 
-            $i = 0;
+                    $i = 0;
 
-            for ($i; $i < $count ; $i++) { 
-                
-                for($a=0; $a < $count; $a++){
-                    $id = $select[$i]->id;
+                    for ($i; $i < $count ; $i++) { 
+                        
+                        for($a=0; $a < $count; $a++){
+                            $id = $select[$i]->id;
+                        }
+
+                        $date = Carbon::now();
+
+                        $date->toDateTimeString();
+                        $tgl_kembali = $date->format('Y-m-d H:i:s');
+
+                        $status = "sudah";
+                        
+                        for($b=0; $b < $count; $b++){
+                            $qty = $select[$i]->qty;
+                        }
+
+                        for($c=0; $c < $count; $c++){
+                            $kodbar = $select[$i]->kodebarang;
+                        }
+
+                        $brg = DB::table('tbbarang')->select('qty')->where('kodebarang', $kodbar)->get();
+
+                        $qtybrg = $brg[0]->qty;
+
+                        $qty_akhir = $qtybrg+$qty;
+
+                        $qtyup = array(
+                            'qty'=>$qty_akhir
+                        );
+
+                        DB::table('tbbarang')->where('kodebarang', $kodbar)->update($qtyup);
+                     
+                        $qty = 0;
+                        $data = array(
+                            'qty'=>$qty,
+                            'tgl_kembali'=> $tgl_kembali,
+                            'status'=> $status,
+                        );
+
+                        DB::table('tbdetil')->where('id', $id)->update($data);
+                    }
+                    return redirect('/idr')->with('berhasil','berhasil');
                 }
-
-                $date = Carbon::now();
-
-                $date->toDateTimeString();
-                $tgl_kembali = $date->format('Y-m-d H:i:s');
-
-                $status = "sudah";
-                
-                for($b=0; $b < $count; $b++){
-                    $qty = $select[$i]->qty;
-                }
-
-                for($c=0; $c < $count; $c++){
-                    $kodbar = $select[$i]->kodebarang;
-                }
-
-                $brg = DB::table('tbbarang')->select('qty')->where('kodebarang', $kodbar)->get();
-
-                $qtybrg = $brg[0]->qty;
-
-                $qty_akhir = $qtybrg+$qty;
-
-                $qtyup = array(
-                    'qty'=>$qty_akhir
-                );
-
-                DB::table('tbbarang')->where('kodebarang', $kodbar)->update($qtyup);
-             
-                $qty = 0;
-                $data = array(
-                    'qty'=>$qty,
-                    'tgl_kembali'=> $tgl_kembali,
-                    'status'=> $status,
-                );
-
-                DB::table('tbdetil')->where('id', $id)->update($data);
-            }
-            return redirect('/idr')->with('alert','Berhasil');
-        }
     }
 
     /**

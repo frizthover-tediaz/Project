@@ -37,15 +37,20 @@
 		</nav>
 		<center>
 		@if(session('berhasil'))
-	        <div class="alert alert-success" style="width: 20%">
-	            {{ session('berhasil')}}
-	        </div>
+	        <input type="hidden" id="alert" value="{{session('berhasil')}}">
 	    @endif
+	    
 	    @if(session('gagal'))
-	        <div class="alert alert-danger" style="width: 20%">
-	            {{ session('gagal')}}
-	        </div>
+	        <input type="hidden" id="alert" value="{{session('gagal')}}"> 
 	    @endif
+
+	    @if(session('iden'))
+	        <input type="hidden" id="alert" value="{{session('iden')}}"> 
+	    @endif
+
+	    @if(session('brg'))
+	        <input type="hidden" id="alert" value="{{session('brg')}}"> 
+	    	@endif
 	    </center>
 	<div class="main-content">
 	    <div class="row">
@@ -66,5 +71,6 @@
 	</div>
     <script src="js/instascan.min.js"></script>
     <script src="js/insert.js"></script>
+    <script src="js/alert.js"></script>
   </body>
 </html>
