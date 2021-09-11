@@ -952,15 +952,77 @@ class Scanner extends Controller
                 }
     }
 
+    public function login(Request $request)
+    {
+        $kode_user = $request->kode_user;
+        $pass = $request->pass;
+
+        $select = DB::table('tbadmin')
+            ->select('*')
+            ->where('kode_user', $kode_user)
+            ->where('pass', $pass)
+            ->get();
+
+        $count = count($select);
+
+        if($count!=0){
+            $nama = $select[0]->nama;
+            session(['nama' => $nama]);
+            return redirect('/admin');
+
+        }else{
+            return redirect('/login')->with('invalid', 'invalid');
+        }
+        
+
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->flush();
+
+        return redirect('/login')->with('logout', 'logout');
+    }
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+
+    public function storebrg(Request $request)
     {
-        //
+        $kodebarang = $request->kodebarang;
+        $nama = $request->nama;
+        $qty = $request->qty;
+        $lokasi = $request->lokasi;
+
+        $check = DB::table('tbbarang')->where('kodebarang', $kodebarang)->get();
+
+        $count = count($check);
+
+        if($count===0){
+
+            $data = array(
+                'kodebarang'=>$kodebarang,
+                'qty'=>$qty,
+                'nama'=>$nama,
+                'lokasi'=>$lokasi
+            );
+
+            DB::table('tbbarang')->insert($data);
+
+            return redirect('/admin')->with('berhasilbrg', 'berhasilbrg');
+        }else{
+            return redirect('/admin')->with('gagalbrg', 'gagalbrg');
+        }
+    }
+    public function show()
+    {
+        $db = DB::table('tbbarang')->select('*')->get();
+
+        return view('data.tbbarang.showbrg', ['data'=>$db] )->with('showbrg', 'showbrg');
     }
 
     /**
@@ -971,7 +1033,9 @@ class Scanner extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = DB::table('tbbarang')->select('*')->where('kodebarang', $id)->get();
+
+        return view('data.tbbarang.edit', ['data'=> $data])->with('editbrg', 'editbrg');
     }
 
     /**
@@ -983,7 +1047,20 @@ class Scanner extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $kodebarang = $request->kodebarang;
+        $nama = $request->nama;
+        $qty = $request->qty;
+        $lokasi = $request->lokasi;
+
+        $data = array(
+            'qty'=>$qty,
+            'nama'=>$nama,
+            'lokasi'=>$lokasi
+        );
+
+        DB::table('tbbarang')->select('*')->where('kodebarang', $kodebarang)->update($data);
+
+        return redirect('/admin')->with('showbrg', 'showbrg');
     }
 
     /**
@@ -994,6 +1071,8 @@ class Scanner extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::table('tbbarang')->select('*')->where('kodebarang', $id)->delete();
+
+        return redirect('/admin')->with('showbrg', 'showbrg');
     }
 }

@@ -52,3 +52,29 @@ Route::get('/idr', function(){
 Route::post('/ider', [Scanner::class, 'storer']);
 
 Route::post('reman', [Scanner::class, 'storen']);
+
+Route::get('/login', function(){
+	return view('login');
+});
+
+Route::post('/log', [Scanner::class, 'login']);
+
+Route::get('/admin', function(){
+	return view('admin');
+});
+
+Route::post('/logout', [Scanner::class, 'logout']);
+
+Route::get('/data/barang', function(){
+	return view('data.tbbarang.barang');
+});
+
+Route::get('/show/barang', [Scanner::class, 'show']);
+
+Route::get('/data/edit/{id}', [Scanner::class, 'edit']);
+
+Route::delete('/data/delete/{id}', [Scanner::class, 'destroy']);
+
+Route::put('/data/update/{id}', [Scanner::class, 'update']);
+
+Route::post('/data/savebrg', [Scanner::class, 'storebrg']);
