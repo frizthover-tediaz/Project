@@ -274,6 +274,8 @@
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <form method="POST" action="{{url('/logout')}}">
                     	@csrf
+                        <input type="hidden" name="nama_session" value="{{Session::get('nama')}}">
+                        <input type="hidden" name="kode_session" value="{{Session::get('kode_user')}}">
                     	<button class="btn btn-primary">Logout</button>
                 	</form>
                 </div>

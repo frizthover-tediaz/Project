@@ -10,7 +10,9 @@
 <form method="POST" action="{{url('/data/updateadm', $data[0]->kode_user)}}" class="form-data" id="form-data">  
     @csrf
     @method('PUT')
-	<input type="hidden" id="id" name="">
+	<input type="hidden" name="kode_session" value="{{Session::get('kode_user')}}">
+	<input type="hidden" name="nama_session" value="{{Session::get('nama')}}">
+
 	<div class="row">
 		<div class="col-sm-3">
 			<div class="form-group">

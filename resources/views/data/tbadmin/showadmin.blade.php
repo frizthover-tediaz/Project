@@ -33,6 +33,8 @@
                                 <form method="POST" action="data/deleteadm/{{$val->kode_user}}">
                                     @csrf
                                     @method('DELETE')
+                                    <input type="hidden" name="nama_session" value="{{Session::get('nama')}}">
+                                    <input type="hidden" name="kode_session" value="{{Session::get('kode_user')}}">
                                     <button id="delete" name="hapus" class="btn btn-danger btn-sm w-100 mt-1"> <i class="fa fa-trash"></i> Hapus </button>
                                 </form>
                             </td>

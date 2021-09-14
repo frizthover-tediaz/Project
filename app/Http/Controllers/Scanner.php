@@ -967,7 +967,9 @@ class Scanner extends Controller
 
         if($count!=0){
             $nama = $select[0]->nama;
+            $kod_user = $select[0]->kode_user;
             session(['nama' => $nama]);
+            session(['kode_user' => $kod_user]);
             return redirect('/admin');
 
         }else{
@@ -979,7 +981,11 @@ class Scanner extends Controller
 
     public function logout(Request $request)
     {
-        $request->session()->flush();
+        $kode_session = $request->kode_session;
+        $nama_session = $request->nama_session;
+
+        $request->session()->forget(['kode_user', $kode_session]);
+        $request->session()->forget(['nama', $nama_session]);
 
         return redirect('/login')->with('logout', 'logout');
     }
@@ -1196,15 +1202,42 @@ class Scanner extends Controller
         $kodeuser = $request->kodeuser;
         $nama = $request->nama;
         $pass = $request->pass;
+        $kode_session = $request->kode_session;
+        $nama_session = $request->nama_session;
 
         $data = array(
             'nama'=>$nama,
             'pass'=>$pass
         );
 
+        if($kode_session == $kodeuser){
+            if($kodeuser == $kodeuser){
+                DB::table('tbadmin')->select('*')->where('kode_user', $kodeuser)->update($data);
+
+                $select = DB::table('tbadmin')
+                    ->select('*')
+                    ->where('kode_user', $id)
+                    ->get();
+
+                $nama_select = $select[0]->nama;
+
+                $request->session()->forget(['nama', $nama_session]);
+
+                session(['nama' => $nama_select]);
+
+                return redirect('/admin')->with('showadm', 'showadm');
+
+            }else{
+                return redirect('/admin');
+            }
+        }else{
+            //
+        }
+
         DB::table('tbadmin')->select('*')->where('kode_user', $kodeuser)->update($data);
 
         return redirect('/admin')->with('showadm', 'showadm');
+
     }
 
     public function updateuser(Request $request, $id)
@@ -1236,9 +1269,28 @@ class Scanner extends Controller
         return redirect('/admin')->with('showbrg', 'showbrg');
     }
 
-    public function destroyadm($id)
-    {
+    public function destroyadm(Request $request, $id)
+    {   
+        $kode_session = $request->kode_session;
+        $nama_session = $request->nama_session;
+        $nama = $request->nama;
+
+        $select = DB::table('tbadmin')
+            ->select('*')
+            ->where('kode_user', $id)
+            ->get();
+
+        $nama_select = $select[0]->nama;
+
+        if($kode_session != $id){
+            DB::table('tbadmin')->select('*')->where('kode_user', $id)->delete();
+        }else{
+
+        $request->session()->forget(['kode_user', $kode_session]);
+        $request->session()->forget(['nama', $nama_session]);
+
         DB::table('tbadmin')->select('*')->where('kode_user', $id)->delete();
+        }
 
         return redirect('/admin')->with('showadm', 'showadm');
     }
