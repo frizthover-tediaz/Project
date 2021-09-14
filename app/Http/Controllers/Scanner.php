@@ -1018,11 +1018,125 @@ class Scanner extends Controller
             return redirect('/admin')->with('gagalbrg', 'gagalbrg');
         }
     }
+
+    public function storeadm(Request $request)
+    {
+        $kodeuser = $request->kodeuser;
+        $nama = $request->nama;
+        $pass = $request->pass;
+
+        $check = DB::table('tbadmin')->where('kode_user', $kodeuser)->get();
+
+        $count = count($check);
+
+        if($count===0){
+
+            $data = array(
+                'kode_user'=>$kodeuser,
+                'nama'=>$nama,
+                'pass'=>$pass
+            );
+
+            DB::table('tbadmin')->insert($data);
+
+            return redirect('/admin')->with('berhasiladm', 'berhasiladm');
+        }else{
+            return redirect('/admin')->with('gagaladm', 'gagaladm');
+        }
+    }
+
+    public function storeuser(Request $request)
+    {
+        $kodeuser = $request->kodeuser;
+        $nama = $request->nama;
+        $ket = $request->ket;
+
+        $check = DB::table('tbuser')->where('kode_user', $kodeuser)->get();
+
+        $count = count($check);
+
+        if($count===0){
+
+            $data = array(
+                'kode_user'=>$kodeuser,
+                'nama'=>$nama,
+                'ket'=>$ket
+            );
+
+            DB::table('tbuser')->insert($data);
+
+            return redirect('/admin')->with('berhasiluser', 'berhasiluser');
+        }else{
+            return redirect('/admin')->with('gagaluser', 'gagaluser');
+        }
+    }
+
+    public function storeiden(Request $request)
+    {
+        $kodeuser = $request->kodeuser;
+        $nama = $request->nama;
+        $ket = $request->ket;
+
+        $check = DB::table('tbidentity')->where('kode_user', $kodeuser)->get();
+
+        $count = count($check);
+
+        if($count===0){
+
+            $data = array(
+                'kode_user'=>$kodeuser,
+                'nama'=>$nama,
+                'ket'=>$ket
+            );
+
+            DB::table('tbidentity')->insert($data);
+
+            return redirect('/admin')->with('berhasiliden', 'berhasiliden');
+        }else{
+            return redirect('/admin')->with('gagaliden', 'gagaliden');
+        }
+    }
+
     public function show()
     {
         $db = DB::table('tbbarang')->select('*')->get();
 
-        return view('data.tbbarang.showbrg', ['data'=>$db] )->with('showbrg', 'showbrg');
+        return view('data.tbbarang.showbrg', ['data'=>$db] );
+    }
+
+    public function showadm()
+    {
+        $db = DB::table('tbadmin')->select('*')->get();
+
+        return view('data.tbadmin.showadmin', ['data'=>$db] );
+    }
+
+    public function showuser()
+    {
+        $db = DB::table('tbuser')->select('*')->get();
+
+        return view('data.tbuser.showuser', ['data'=>$db] );
+    }
+
+    public function showiden()
+    {
+        $db = DB::table('tbidentity')->select('*')->get();
+
+        return view('data.tbidentity.showiden', ['data'=>$db] );
+    }
+
+    public function showitem()
+    {
+        $db = DB::table('tbitem')->select('*')->get();
+
+        return view('data.tbitem.showitem', ['data'=>$db] );
+    }
+
+    public function showdetil()
+    {
+        $db = DB::table('tbdetil')->select('*')->get();
+
+        return view('data.tbdetil.showdetil', ['data'=>$db] );
     }
 
     /**
@@ -1036,6 +1150,20 @@ class Scanner extends Controller
         $data = DB::table('tbbarang')->select('*')->where('kodebarang', $id)->get();
 
         return view('data.tbbarang.edit', ['data'=> $data])->with('editbrg', 'editbrg');
+    }
+
+    public function editadm($id)
+    {
+        $data = DB::table('tbadmin')->select('*')->where('kode_user', $id)->get();
+
+        return view('data.tbadmin.editadmin', ['data'=> $data])->with('editadm', 'editadm');
+    }
+
+    public function edituser($id)
+    {
+        $data = DB::table('tbuser')->select('*')->where('kode_user', $id)->get();
+
+        return view('data.tbuser.edituser', ['data'=> $data])->with('edituser', 'edituser');
     }
 
     /**
@@ -1063,6 +1191,38 @@ class Scanner extends Controller
         return redirect('/admin')->with('showbrg', 'showbrg');
     }
 
+    public function updateadm(Request $request, $id)
+    {
+        $kodeuser = $request->kodeuser;
+        $nama = $request->nama;
+        $pass = $request->pass;
+
+        $data = array(
+            'nama'=>$nama,
+            'pass'=>$pass
+        );
+
+        DB::table('tbadmin')->select('*')->where('kode_user', $kodeuser)->update($data);
+
+        return redirect('/admin')->with('showadm', 'showadm');
+    }
+
+    public function updateuser(Request $request, $id)
+    {
+        $kodeuser = $request->kodeuser;
+        $nama = $request->nama;
+        $ket = $request->ket;
+
+        $data = array(
+            'nama'=>$nama,
+            'ket'=>$ket
+        );
+
+        DB::table('tbuser')->select('*')->where('kode_user', $kodeuser)->update($data);
+
+        return redirect('/admin')->with('showuser', 'showuser');
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -1074,5 +1234,19 @@ class Scanner extends Controller
         DB::table('tbbarang')->select('*')->where('kodebarang', $id)->delete();
 
         return redirect('/admin')->with('showbrg', 'showbrg');
+    }
+
+    public function destroyadm($id)
+    {
+        DB::table('tbadmin')->select('*')->where('kode_user', $id)->delete();
+
+        return redirect('/admin')->with('showadm', 'showadm');
+    }
+
+    public function destroyuser($id)
+    {
+        DB::table('tbuser')->select('*')->where('kode_user', $id)->delete();
+
+        return redirect('/admin')->with('showuser', 'showuser');
     }
 }

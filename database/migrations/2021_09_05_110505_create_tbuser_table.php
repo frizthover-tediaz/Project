@@ -14,7 +14,7 @@ class CreateTbuserTable extends Migration
     public function up()
     {
         Schema::create('tbuser', function (Blueprint $table) {
-            $table->integer('kode_user');
+            $table->string('kode_user', 50);
             $table->primary('kode_user');
             $table->string('nama', 50);
             $table->string('ket',50);

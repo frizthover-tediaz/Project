@@ -78,3 +78,37 @@ Route::delete('/data/delete/{id}', [Scanner::class, 'destroy']);
 Route::put('/data/update/{id}', [Scanner::class, 'update']);
 
 Route::post('/data/savebrg', [Scanner::class, 'storebrg']);
+
+Route::get('/data/admin', function(){
+	return view('data.tbadmin.admin');
+});
+
+Route::post('/data/saveadmin', [Scanner::class, 'storeadm']);
+
+Route::get('/show/admin', [Scanner::class, 'showadm']);
+
+Route::get('/data/editadm/{id}', [Scanner::class, 'editadm']);
+
+Route::delete('/data/deleteadm/{id}', [Scanner::class, 'destroyadm']);
+
+Route::put('/data/updateadm/{id}', [Scanner::class, 'updateadm']);
+
+Route::get('/data/user', function(){
+	return view('data.tbuser.user');
+});
+
+Route::post('/data/saveuser', [Scanner::class, 'storeuser']);
+
+Route::get('/show/user', [Scanner::class, 'showuser']);
+
+Route::get('/data/edituser/{id}', [Scanner::class, 'edituser']);
+
+Route::delete('/data/deleteuser/{id}', [Scanner::class, 'destroyuser']);
+
+Route::put('/data/updateuser/{id}', [Scanner::class, 'updateuser']);
+
+Route::get('/show/iden', [Scanner::class, 'showiden']);
+
+Route::get('/show/item', [Scanner::class, 'showitem']);
+
+Route::get('/show/detil', [Scanner::class, 'showdetil']);

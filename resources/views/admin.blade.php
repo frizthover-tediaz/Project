@@ -13,13 +13,34 @@
     <input type="hidden" id="alert" value="{{session('gagalbrg')}}"> 
 @endif
 
+@if(session('berhasiladm'))
+    <input type="hidden" id="alert" value="{{session('berhasiladm')}}">
+@endif
+
+@if(session('gagaladm'))
+    <input type="hidden" id="alert" value="{{session('gagaladm')}}"> 
+@endif
+
+@if(session('berhasiluser'))
+    <input type="hidden" id="alert" value="{{session('berhasiluser')}}">
+@endif
+
+@if(session('gagaluser'))
+    <input type="hidden" id="alert" value="{{session('gagaluser')}}"> 
+@endif
+
 @if(session('showbrg'))
     <input type="hidden" id="alert" value="{{session('showbrg')}}"> 
 @endif
 
-@if(session('deletebrg'))
-    <input type="hidden" id="alert" value="{{session('deletebrg')}}"> 
+@if(session('showadm'))
+    <input type="hidden" id="alert" value="{{session('showadm')}}"> 
 @endif
+
+@if(session('showuser'))
+    <input type="hidden" id="alert" value="{{session('showuser')}}"> 
+@endif
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -87,6 +108,12 @@
                         <a class="collapse-item" onclick="loadTbbarang()">
                             <i class="fas fa-fw fa-list"></i> Barang
                         </a>
+                        <a class="collapse-item" onclick="loadTbadmin()">
+                            <i class="fas fa-fw fa-user-cog"></i> Admin
+                        </a>
+                        <a class="collapse-item" onclick="loadTbuser()">
+                            <i class="fas fa-fw fa-user"></i> User
+                        </a>
                     </div>
                 </div>
             </li>
@@ -102,6 +129,11 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Data :</h6>
                         <a class="collapse-item" onclick="showTbbarang()"><i class="fas fa-fw fa-list"></i> Barang</a>
+                        <a class="collapse-item" onclick="showTbadmin()"><i class="fas fa-fw fa-user-cog"></i> Admin</a>
+                        <a class="collapse-item" onclick="showTbuser()"><i class="fas fa-fw fa-user"></i> User</a>
+                        <a class="collapse-item" onclick="showTbidentity()"><i class="fas fa-fw fa-address-book"></i> Identity</a>
+                        <a class="collapse-item" onclick="showTbitem()"><i class="fas fa-fw fa-boxes"></i> Item</a>
+                        <a class="collapse-item" onclick="showTbdetil()"><i class="fas fa-fw fa-clipboard-list"></i> Detil</a>
                     </div>
                 </div>
             </li>
@@ -262,76 +294,13 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
 
-	<script type="text/javascript">
-		function loadTbbarang() {
-		    var url = "{{ url('data/barang') }}";
-		    var xhttp;
-
-		    xhttp = new XMLHttpRequest();
-		    xhttp.onreadystatechange = function() {
-		        if (this.readyState == 4 && this.status == 200) {
-		            data = this.responseText;
-		            document.getElementById("data").innerHTML = data;
-		        }
-		    };
-		    xhttp.open("GET", url, true);
-		    xhttp.send();
-		}
-
-		function showTbbarang() {
-		    var url = "{{ url('show/barang') }}";
-		    var xhttp;
-
-		    xhttp = new XMLHttpRequest();
-		    xhttp.onreadystatechange = function() {
-		        if (this.readyState == 4 && this.status == 200) {
-		            data = this.responseText;
-		            document.getElementById("data").innerHTML = data;
-
-		            var MyDiv = document.getElementById('data');
-
-		            var arr = MyDiv.getElementsByTagName('script');
-					for (var n = 0; n < arr.length; n++){
-					    eval(arr[n].innerHTML);
-					};
-				};
-		    };
-		    xhttp.open("GET", url, true);
-		    xhttp.send();
-		};
-
-		function editTbbarang(id) {
-		    var url = "{{ url('data/edit') }}"+'/'+id;
-		    var xhttp;
-
-		    xhttp = new XMLHttpRequest();
-		    xhttp.onreadystatechange = function() {
-		        if (this.readyState == 4 && this.status == 200) {
-		            data = this.responseText;
-		            document.getElementById("data").innerHTML = data;
-		        };
-		    };
-		    xhttp.open("GET", url, true);
-		    xhttp.send();
-		}
-
-		function deleteTbbarang(id) {
-		    var url = "{{ url('data/delete') }}"+'/'+id;
-		    var xhttp;
-
-		    xhttp = new XMLHttpRequest();
-		    xhttp.onreadystatechange = function() {
-		        if (this.readyState == 4 && this.status == 200) {
-		            data = this.responseText;
-		            document.getElementById("data").innerHTML = data;
-		        };
-		    };
-		    xhttp.open("GET", url, true);
-		    xhttp.send();
-		}
-
-	</script>
-
-	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.js"></script>
+	<script src="js/tbbarang.js"></script>
+    <script src="js/tbadmin.js"></script>
+    <script src="js/tbuser.js"></script>
+    <script src="js/tbidentity.js"></script>
+    <script src="js/tbitem.js"></script>
+    <script src="js/tbdetil.js"></script>
+	
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.js"></script>
 </body>
 </html>
