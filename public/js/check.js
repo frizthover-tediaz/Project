@@ -5,8 +5,8 @@ function check(){
 
 	
 	if (check.checked == true){
-		qty.style.backgroundColor = "rgba(16, 16, 16, 0.15)";
-		br.style.backgroundColor = "rgba(16, 16, 16, 0.15)";
+		qty.style.backgroundColor = "#eaecf4";
+		br.style.backgroundColor = "#eaecf4";
 	
 		qty.disabled = true;
 		br.disabled = true;
