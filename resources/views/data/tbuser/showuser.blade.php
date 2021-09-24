@@ -24,9 +24,9 @@
                 <tbody>
                     @foreach($data as $val)
                         <tr>
-                            <td style="padding: 3%">{{$val->kode_user}}</td>
-                            <td style="padding: 3%">{{$val->nama}}</td>
-                            <td style="padding: 3%">{{$val->ket}}</td>
+                            <td>{{$val->kode_user}}</td>
+                            <td>{{$val->nama}}</td>
+                            <td>{{$val->ket}}</td>
                             <td>
                                 <button type="button" id="edit" name="ubah" class="btn btn-success btn-sm w-100" onclick="editTbuser('{{$val->kode_user}}')"> <i class="fa fa-edit"></i> Edit </button></a>
 

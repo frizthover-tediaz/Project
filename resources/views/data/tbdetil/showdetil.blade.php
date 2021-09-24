@@ -6,8 +6,13 @@
 @endif
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Data Detil</h6>
+    <div class="row" style="justify-content: space-between;">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Data Detil</h6>
+        </div>
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-danger"><a href="data/deleteall"><i class="fa fa-trash" style="color: red;">   Delete All</i></a></h6>
+        </div>
     </div>
     <div class="card-body">
         <div class="table-responsive">

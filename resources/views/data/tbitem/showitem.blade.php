@@ -28,14 +28,14 @@
                 <tbody>
                     @foreach($data as $val)
                         <tr>
-                            <td style="padding: 3%">{{$val->id}}</td>
-                            <td style="padding: 3%">{{$val->kode_user}}</td>
-                            <td style="padding: 3%">{{$val->kodebarang}}</td>
-                            <td style="padding: 3%">{{$val->nama}}</td>
-                            <td style="padding: 3%">{{$val->qty}}</td>
-                            <td style="padding: 3%">{{$val->lokasi}}</td>
-                            <td style="padding: 3%">{{$val->tgl_pinjam}}</td>
-                            <td style="padding: 3%">{{$val->tgl_kembali}}</td>
+                            <td>{{$val->id}}</td>
+                            <td>{{$val->kode_user}}</td>
+                            <td>{{$val->kodebarang}}</td>
+                            <td>{{$val->nama}}</td>
+                            <td>{{$val->qty}}</td>
+                            <td>{{$val->lokasi}}</td>
+                            <td>{{$val->tgl_pinjam}}</td>
+                            <td>{{$val->tgl_kembali}}</td>
                         </tr>
                     @endforeach
                 </tbody>

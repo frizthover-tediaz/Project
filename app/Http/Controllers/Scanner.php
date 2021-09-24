@@ -1301,4 +1301,11 @@ class Scanner extends Controller
 
         return redirect('/admin')->with('showuser', 'showuser');
     }
+
+    public function deleteall()
+    {
+        DB::table('tbdetil')->select('*')->delete();
+
+        return redirect('/admin')->with('showdetil', 'showdetil');
+    }
 }

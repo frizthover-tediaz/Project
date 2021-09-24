@@ -25,10 +25,10 @@
                 <tbody>
                     @foreach($data as $val)
                         <tr>
-                            <td style="padding: 3%">{{$val->kodebarang}}</td>
-                            <td style="padding: 3%">{{$val->nama}}</td>
-                            <td style="padding: 3%">{{$val->qty}}</td>
-                            <td style="padding: 3%">{{$val->lokasi}}</td>
+                            <td>{{$val->kodebarang}}</td>
+                            <td>{{$val->nama}}</td>
+                            <td>{{$val->qty}}</td>
+                            <td>{{$val->lokasi}}</td>
                             <td>
                                 <button type="button" id="edit" name="ubah" class="btn btn-success btn-sm w-100" onclick="editTbbarang('{{$val->kodebarang}}')"> <i class="fa fa-edit"></i> Edit </button></a>
 

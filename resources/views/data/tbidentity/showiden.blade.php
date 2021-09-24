@@ -24,10 +24,10 @@
                 <tbody>
                     @foreach($data as $val)
                         <tr>
-                            <td style="padding: 3%">{{$val->id}}</td>
-                            <td style="padding: 3%">{{$val->kode_user}}</td>
-                            <td style="padding: 3%">{{$val->nama}}</td>
-                            <td style="padding: 3%">{{$val->ket}}</td>
+                            <td>{{$val->id}}</td>
+                            <td>{{$val->kode_user}}</td>
+                            <td>{{$val->nama}}</td>
+                            <td>{{$val->ket}}</td>
                         </tr>
                     @endforeach
                 </tbody>
