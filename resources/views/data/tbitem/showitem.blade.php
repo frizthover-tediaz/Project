@@ -22,6 +22,7 @@
                         <th>Lokasi</th>
                         <th>Tgl Pinjam</th>
                         <th>Tgl Kembali</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
 
@@ -36,6 +37,13 @@
                             <td>{{$val->lokasi}}</td>
                             <td>{{$val->tgl_pinjam}}</td>
                             <td>{{$val->tgl_kembali}}</td>
+                            <td>
+                                <form method="POST" action="data/deleteitem/{{$val->id}}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button id="delete" name="hapus" class="btn btn-danger btn-sm w-100 mt-1"> <i class="fa fa-trash"></i> Hapus </button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

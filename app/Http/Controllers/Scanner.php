@@ -1301,4 +1301,18 @@ class Scanner extends Controller
 
         return redirect('/admin')->with('showuser', 'showuser');
     }
+
+    public function deleteiden($id)
+    {
+        DB::table('tbidentity')->select('*')->where('kode_user', $id)->delete();
+
+        return redirect('/admin')->with('showiden', 'showiden');
+    }
+
+    public function deleteitem($id)
+    {
+        DB::table('tbitem')->select('*')->where('id', $id)->delete();
+
+        return redirect('/admin')->with('showitem', 'showitem');
+    }
 }

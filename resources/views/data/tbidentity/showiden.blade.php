@@ -18,6 +18,7 @@
                         <th>Kode User</th>
                         <th>Nama</th>
                         <th>Ket</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
 
@@ -28,6 +29,13 @@
                             <td>{{$val->kode_user}}</td>
                             <td>{{$val->nama}}</td>
                             <td>{{$val->ket}}</td>
+                            <td>
+                                <form method="POST" action="data/deleteiden/{{$val->kode_user}}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button id="delete" name="hapus" class="btn btn-danger btn-sm w-100 mt-1"> <i class="fa fa-trash"></i> Hapus </button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

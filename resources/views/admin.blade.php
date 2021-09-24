@@ -41,6 +41,14 @@
     <input type="hidden" id="alert" value="{{session('showuser')}}"> 
 @endif
 
+@if(session('showiden'))
+    <input type="hidden" id="alert" value="{{session('showiden')}}"> 
+@endif
+
+@if(session('showitem'))
+    <input type="hidden" id="alert" value="{{session('showitem')}}"> 
+@endif
+
 <!DOCTYPE html>
 <html>
 <head>

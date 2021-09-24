@@ -112,3 +112,6 @@ Route::get('/show/iden', [Scanner::class, 'showiden']);
 Route::get('/show/item', [Scanner::class, 'showitem']);
 
 Route::get('/show/detil', [Scanner::class, 'showdetil']);
+
+Route::delete('/data/deleteiden/{id}', [Scanner::class, 'deleteiden']);
+Route::delete('/data/deleteitem/{id}', [Scanner::class, 'deleteitem']);
