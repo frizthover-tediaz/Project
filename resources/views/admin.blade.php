@@ -41,10 +41,6 @@
     <input type="hidden" id="alert" value="{{session('showuser')}}"> 
 @endif
 
-@if(session('showdetil'))
-    <input type="hidden" id="alert" value="{{session('showdetil')}}"> 
-@endif
-
 <!DOCTYPE html>
 <html>
 <head>
