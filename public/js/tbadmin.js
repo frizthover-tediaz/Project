@@ -1,5 +1,5 @@
 function loadTbadmin() {
-    var url = "data/admin";
+    var url = "dataadm";
     var xhttp;
 
     xhttp = new XMLHttpRequest();

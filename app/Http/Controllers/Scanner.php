@@ -1181,9 +1181,9 @@ class Scanner extends Controller
 
             DB::table('tbbarang')->insert($data);
 
-            return redirect('/admin')->with('alert', 'berhasilbrg');
+            return redirect('insertbrg')->with('berhasilbrg', 'berhasilbrg');
         }else{
-            return redirect('/admin')->with('alert', 'gagalbrg');
+            return redirect('insertbrg')->with('gagalbrg', 'gagalbrg');
         }
     }
 
@@ -1207,9 +1207,9 @@ class Scanner extends Controller
 
             DB::table('tbadmin')->insert($data);
 
-            return redirect('/admin')->with('alert', 'berhasiladm');
+            return redirect('insertadm')->with('berhasiladm', 'berhasiladm');
         }else{
-            return redirect('/admin')->with('alert', 'gagaladm');
+            return redirect('insertadm')->with('gagaladm', 'gagaladm');
         }
     }
 
@@ -1233,9 +1233,9 @@ class Scanner extends Controller
 
             DB::table('tbuser')->insert($data);
 
-            return redirect('/admin')->with('alert', 'berhasiluser');
+            return redirect('insertuser')->with('berhasiluser', 'berhasiluser');
         }else{
-            return redirect('/admin')->with('alert', 'gagaluser');
+            return redirect('insertuser')->with('gagaluser', 'gagaluser');
         }
     }
 
@@ -1313,11 +1313,13 @@ class Scanner extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $data = DB::table('tbbarang')->select('*')->where('kodebarang', $id)->get();
+    public function edit(Request $request)
+    {   
+        $kodebarang = $request->kodebarang;
 
-        return view('data.tbbarang.edit', ['data'=> $data])->with('editbrg', 'editbrg');
+        $data = DB::table('tbbarang')->select('*')->where('kodebarang', $kodebarang)->get();
+
+        return view('data.tbbarang.edit', ['data'=> $data]);
     }
 
     public function editadm($id)
@@ -1341,7 +1343,7 @@ class Scanner extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $kodebarang = $request->kodebarang;
         $nama = $request->nama;
@@ -1354,9 +1356,27 @@ class Scanner extends Controller
             'lokasi'=>$lokasi
         );
 
-        DB::table('tbbarang')->select('*')->where('kodebarang', $kodebarang)->update($data);
+        $db = DB::table('tbbarang')->select('*')->where('kodebarang', $kodebarang)->get();
+        $dbcount = count($db);
 
-        return redirect('/admin')->with('alert', 'showbrg');
+        if($dbcount==0){
+            $status = "gupd";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbbarang.dltbrg', ['data'=>$db, 'status'=>$array]);
+        }else{
+
+            DB::table('tbbarang')->select('*')->where('kodebarang', $kodebarang)->update($data);
+
+            $db = DB::table('tbbarang')->select('*')->get();
+
+            $status = "bupd";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbbarang.dltbrg', ['data'=>$db, 'status'=>$array]);
+        }
     }
 
     public function updateadm(Request $request, $id)
@@ -1424,11 +1444,35 @@ class Scanner extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        DB::table('tbbarang')->select('*')->where('kodebarang', $id)->delete();
+    public function destroy(Request $request)
+    {   
+        $kodebarang = $request->kodebarang;
 
-        return redirect('/admin')->with('alert', 'showbrg');
+        $dbold = DB::table('tbbarang')->select('*')->get();
+
+        $countold = count($dbold);
+
+        DB::table('tbbarang')->select('*')->where('kodebarang', $kodebarang)->delete();
+
+        $dbnew = DB::table('tbbarang')->select('*')->get();
+
+        $countnew = count($dbnew);
+
+        if($countnew<$countold){
+            $status = "berhasil";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbbarang.dltbrg', ['data'=>$dbnew, 'status'=>$array]);
+        }else{
+            $status="gagal";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbbarang.dltbrg', ['data'=>$dbold, 'status'=>$array]);
+        }
+
+        
     }
 
     public function destroyadm(Request $request, $id)

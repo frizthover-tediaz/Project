@@ -1,5 +1,5 @@
 function loadTbuser() {
-    var url = "data/user";
+    var url = "datauser";
     var xhttp;
 
     xhttp = new XMLHttpRequest();
@@ -14,7 +14,7 @@ function loadTbuser() {
 }
 
 function showTbuser() {
-    var url = "show/user";
+    var url = "showuser";
     var xhttp;
 
     xhttp = new XMLHttpRequest();

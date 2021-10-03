@@ -1,5 +1,5 @@
 function loadTbbarang() {
-    var url = "data/barang";
+    var url = "databrg";
     var xhttp;
 
     xhttp = new XMLHttpRequest();
@@ -14,7 +14,7 @@ function loadTbbarang() {
 }
 
 function showTbbarang() {
-    var url = "show/barang";
+    var url = "showbrg";
     var xhttp;
 
     xhttp = new XMLHttpRequest();
@@ -34,33 +34,3 @@ function showTbbarang() {
     xhttp.open("GET", url, true);
     xhttp.send();
 };
-
-function editTbbarang(id) {
-    var url = "data/edit"+"/"+id;
-    var xhttp;
-
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            data = this.responseText;
-            document.getElementById("data").innerHTML = data;
-        };
-    };
-    xhttp.open("GET", url, true);
-    xhttp.send();
-}
-
-function deleteTbbarang(id) {
-    var url = "data/delete"+'/'+id;
-    var xhttp;
-
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            data = this.responseText;
-            document.getElementById("data").innerHTML = data;
-        };
-    };
-    xhttp.open("GET", url, true);
-    xhttp.send();
-}

@@ -1,5 +1,5 @@
 function showTbdetil() {
-    var url = "show/detil";
+    var url = "showdetil";
     var xhttp;
 
     xhttp = new XMLHttpRequest();
@@ -17,4 +17,5 @@ function showTbdetil() {
     };
     xhttp.open("GET", url, true);
     xhttp.send();
+
 };

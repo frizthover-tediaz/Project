@@ -42,7 +42,7 @@
 
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-        	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+        	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
                 <div class="sidebar-brand-icon">
                     <img class="mini" src="img/logo_icon.png" style="width:2.5rem">
                 </div>
@@ -164,12 +164,52 @@
                 </nav>
 
                 <div class="container-fluid" id="data">
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4" style="display: block !important; text-align: center; padding: 15% 0% 0% 0%;">
-                        <h1 class="h3 mb-0 text-gray-800">Welcome, {{Session::get('nama')}}</h1>
-                        <br>
-                    	<img class="mini" src="img/logo3.svg">
+                	@if(session('berhasiladm'))
+					<div class="alert alert-success" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Berhasil Diproses!</div>
 
-                    </div>
+					@elseif(session('gagaladm'))
+					<div class="alert alert-danger" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Tidak Berhasil Diproses!</div>
+			    	@endif
+
+                    <h1 class="h3 mb-5 text-gray-800">Insert Admin</h1>
+
+					<form method="POST" action="{{url('/data/saveadmin')}}" class="form-data" id="form-data">  
+					    @csrf
+						<input type="hidden" id="id" name="">
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>Kode User</label>
+									<input type="text" name="kodeuser" class="form-control" required value="">
+								</div>
+							</div>
+
+					        <div class="col-sm-3">
+					        	<div class="form-group">
+									<label>Nama</label>
+									<input type="text" name="nama" class="form-control" required value="">
+								</div>
+					        </div>
+
+					        <div class="col-sm-3">
+					        	<div class="form-group">
+									<label>Password</label><br>
+									<input type="text" name="pass" class="form-control" required value="">
+								</div>
+					        </div>
+						</div>
+						
+						<div class="form-group" style="display: flex;">
+							<button name="simpan" id="simpan" class="btn btn-primary" style="margin-right: 1%">
+								<i class="fa fa-save"></i> Save
+							</button>
+
+							<button type="button" name="clear" id="clear" class="btn btn-warning" onclick="loadTbadmin()">
+								<i class="fa fa-trash"></i> Clear
+							</button>
+						</div>
+					</form>
+
                 </div>
 
             </div>

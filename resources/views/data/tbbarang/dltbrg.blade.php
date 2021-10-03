@@ -42,7 +42,7 @@
 
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-        	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+        	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
                 <div class="sidebar-brand-icon">
                     <img class="mini" src="img/logo_icon.png" style="width:2.5rem">
                 </div>
@@ -164,14 +164,67 @@
                 </nav>
 
                 <div class="container-fluid" id="data">
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4" style="display: block !important; text-align: center; padding: 15% 0% 0% 0%;">
-                        <h1 class="h3 mb-0 text-gray-800">Welcome, {{Session::get('nama')}}</h1>
-                        <br>
-                    	<img class="mini" src="img/logo3.svg">
+                    @if($status['status'] == 'berhasil')
+                        <div class="alert alert-success" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Berhasil Dihapus!
+                        </div>
 
+                    @elseif($status['status'] == 'gagal')
+                        <div class="alert alert-danger" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Gagal Dihapus!
+                        </div>
+                    @elseif($status['status'] == 'bupd')
+                        <div class="alert alert-success" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Berhasil Diupdate!
+                        </div>
+                    @elseif($status['status'] == 'gupd')
+                        <div class="alert alert-danger" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Gagal Diupdate!
+                        </div>
+                    @endif
+
+			    	<div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Data Barang</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered display" id="myTable" width="100%" cellspacing="0" style="text-align: center">
+                                    <thead>
+                                        <tr>
+                                            <th>Kode Barang</th>
+                                            <th>Nama</th>
+                                            <th>Qty</th>
+                                            <th>Lokasi</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach($data as $val)
+                                            <tr>
+                                                <td>{{$val->kodebarang}}</td>
+                                                <td>{{$val->nama}}</td>
+                                                <td>{{$val->qty}}</td>
+                                                <td>{{$val->lokasi}}</td>
+                                                <td>
+                                                    <form method="POST" action="/dataeditbrg">
+                                                        @csrf
+                                                        <input type="hidden" name="kodebarang" value="{{$val->kodebarang}}">
+                                                        <button id="edit" name="ubah" class="btn btn-success btn-sm w-100"> <i class="fa fa-edit"></i> Edit </button></a>
+                                                    </form>
+
+                                                    <form method="POST" action="/datadltbrgs">
+                                                        @csrf
+                                                        <input type="hidden" name="kodebarang" value="{{$val->kodebarang}}">
+                                                        <button id="delete" name="hapus" class="btn btn-danger btn-sm w-100 mt-1"> <i class="fa fa-trash"></i> Hapus </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
 
             <footer class="sticky-footer bg-white">
@@ -233,5 +286,11 @@
     <script src="js/tbdetil.js"></script>
 	
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.js"></script>
+
+    <script type="text/javascript">
+            $(document).ready( function () {
+            $('#myTable').DataTable();
+        } );
+    </script>
 </body>
 </html>

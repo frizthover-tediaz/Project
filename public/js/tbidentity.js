@@ -1,5 +1,5 @@
 function showTbidentity() {
-    var url = "show/iden";
+    var url = "showiden";
     var xhttp;
 
     xhttp = new XMLHttpRequest();
@@ -17,4 +17,5 @@ function showTbidentity() {
     };
     xhttp.open("GET", url, true);
     xhttp.send();
+
 };

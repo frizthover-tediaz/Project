@@ -35,17 +35,15 @@
 			</form>
 		</nav>
 
-			@if(session('invalid'))
-	        <input type="hidden" id="alert" value="{{session('invalid')}}"> 
-	    	@endif
-
-	    	@if(session('logout'))
-	        <input type="hidden" id="alert" value="{{session('logout')}}"> 
-	    	@endif
-
-
 	<div class="main-content">
 	    <center>
+
+	    	@if(session('invalid'))
+			<div class="alert alert-danger" role="alert" style="width: 50%;text-align: left;padding: .5rem .5rem">Maaf Kode User atau Password salah.</div>
+
+			@elseif(session('logout'))
+			<div class="alert alert-success" role="alert" style="width: 50%;text-align: left;padding: .5rem .5rem">Logout Berhasil!</div>
+	    	@endif
 	    	<div class="border">
 	    		<div class="mcontent" style="text-align: center;">
 	    			<form action="{{ url('/log') }}" method="POST">

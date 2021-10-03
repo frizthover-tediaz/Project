@@ -15,20 +15,6 @@ if(x=="gagal"){
 }else if(x=="logout"){
 	alert("Logout Berhasil");
 }else if(x=="berhasilbrg"){
-	alert("Berhasil");
-	var url = "data/barang";
-    var xhttp;
-
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            data = this.responseText;
-            document.getElementById("data").innerHTML = data;
-        }
-    };
-    xhttp.open("GET", url, true);
-    xhttp.send();
-
     var ele2 = document.getElementById('collapsePages');
     ele2.classList.add("show");
 }else if(x=="gagalbrg"){

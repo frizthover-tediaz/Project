@@ -1,5 +1,5 @@
 function showTbitem() {
-    var url = "show/item";
+    var url = "showitem";
     var xhttp;
 
     xhttp = new XMLHttpRequest();
@@ -17,4 +17,5 @@ function showTbitem() {
     };
     xhttp.open("GET", url, true);
     xhttp.send();
+
 };
