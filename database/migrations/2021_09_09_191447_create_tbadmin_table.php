@@ -14,10 +14,11 @@ class CreateTbadminTable extends Migration
     public function up()
     {
         Schema::create('tbadmin', function (Blueprint $table) {
-            $table->integer('kode_user', 50);
-            $table->primary('kode_user');
+            $table->integer('kode_user')->primary();
             $table->string('nama', 50);
             $table->string('pass', 50);
+            $table->dateTime('terakhir_login')->nullable()->default(null);;
+            $table->dateTime('terakhir-logout')->nullable()->default(null);;
         });
     }
 

@@ -12,8 +12,8 @@ body{
 	background-attachment: fixed;
 }
 .buttonnav{
-	width: 100px;
-	height: 48px;
+	width: 105px;
+	padding: 8%;
 	background-color: #B1B9FE;
 	border:1px solid #000;
 	border-radius: 15px;

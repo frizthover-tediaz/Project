@@ -17,6 +17,8 @@
                         <th>Kode User</th>
                         <th>Nama</th>
                         <th>Password</th>
+                        <th>Terakhir Login</th>
+                        <th>Terakhir Logout</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -27,6 +29,8 @@
                             <td>{{$val->kode_user}}</td>
                             <td>{{$val->nama}}</td>
                             <td>{{$val->pass}}</td>
+                            <td>{{$val->terakhir_login}}</td>
+                            <td>{{$val->terakhir_logout}}</td>
                             <td>
                                 <button type="button" id="edit" name="ubah" class="btn btn-success btn-sm w-100" onclick="editTbadmin('{{$val->kode_user}}')"> <i class="fa fa-edit"></i> Edit </button></a>
 

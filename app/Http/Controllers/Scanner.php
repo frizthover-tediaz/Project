@@ -27,6 +27,22 @@ class Scanner extends Controller
             return redirect('/idr');
         }else if($valid=="Scan"){
             return redirect('/');
+        }else if($valid=="Manuals"){
+            $kode_user = $request->kode_user;
+
+            $scanner = DB::table('tbbarang')->select('*')->get();
+
+            $status = "";
+
+            $scan = array(
+                    'kode_user'=>$kode_user,
+                    'brg'=>$scanner,
+                    'status'=>$status
+            );
+
+            return view('manual', ['scan'=>$scan]); 
+        }else if($valid=="Home"){
+            return redirect('/');
         }
 
         return $valid;
@@ -186,6 +202,7 @@ class Scanner extends Controller
                 $e = explode(',', $ma);
 
                 $data = array(
+                        'kode_user'=>$kode_user,
                         'nama'=> $nama,
                         'ket'=> $ket,
                         'kodebarang'=>$mat,
@@ -307,6 +324,7 @@ class Scanner extends Controller
                 $e = explode(',', $ma);
 
                 $data = array(
+                        'kode_user'=>$kode_user,
                         'nama'=> $nama,
                         'ket'=> $ket,
                         'kodebarang'=>$mat,
@@ -319,7 +337,14 @@ class Scanner extends Controller
                 return view('detil', ['data'=>$data]);
             }
         }else{
-            return redirect('/')->with('brg', 'brg');
+
+            $status = "brg";
+
+            $data = array(
+                        'kode_user'=>$kode_user,
+                        'status'=>$status
+            );
+            return view('index', ['data'=>$data]);
         }
     }
 
@@ -334,15 +359,22 @@ class Scanner extends Controller
             $nama = $select[0]->nama;
 
             $ket = $select[0]->ket;
+            $status = "";
 
             $data = array(
                     'kode_user'=> $kode_user,
                     'nama'=> $nama,
-                    'ket'=>$ket
+                    'ket'=>$ket,
                 );
 
             DB::table('tbidentity')->insert($data);
             
+
+            $data = array(
+                    'kode_user'=> $kode_user,
+                    'status'=> $status
+                );
+
             return view('index', ['data'=>$data]);
         }else{
             return redirect('/')->with('iden', 'iden');
@@ -493,7 +525,7 @@ class Scanner extends Controller
             $nama = $select[0]->nama;
 
             $ket = $select[0]->ket;
-
+            $status="";
             $data = array(
                     'kode_user'=> $kode_user,
                     'nama'=> $nama,
@@ -507,6 +539,7 @@ class Scanner extends Controller
             $scan = array(
                     'kode_user'=>$kode_user,
                     'brg'=>$scanner,
+                    'status'=>$status
             );
 
             return view('manual', ['scan'=>$scan]);
@@ -534,7 +567,18 @@ class Scanner extends Controller
             $qty_get = $request->qty;
 
             if($pick_qty<$qty_get){
-                return redirect('iden')->with('gagal', 'gagal');
+                $scanner = DB::table('tbbarang')
+                            ->select('*')
+                            ->get();
+
+                $gagal = "gagal";
+
+                $scan = array(
+                'kode_user'=>$kode_user,
+                'brg'=>$scanner,
+                'status'=>$gagal
+            );                        
+                return view('manual', ['scan'=>$scan]);
             }
 
 
@@ -650,6 +694,7 @@ class Scanner extends Controller
                 $e = explode(',', $ma);
 
                 $data = array(
+                        'kode_user'=>$kode_user,
                         'nama'=> $nama,
                         'ket'=> $ket,
                         'kodebarang'=>$mat,
@@ -770,6 +815,7 @@ class Scanner extends Controller
                 $e = explode(',', $ma);
 
                 $data = array(
+                        'kode_user'=>$kode_user,
                         'nama'=> $nama,
                         'ket'=> $ket,
                         'kodebarang'=>$mat,
@@ -782,9 +828,20 @@ class Scanner extends Controller
                 return view('detil', ['data'=>$data]);
             }
         }else{
-            return redirect('/iden')->with('brg', 'brg');
+            $scanner = DB::table('tbbarang')
+                ->select('*')
+                ->get();
+
+            $brg0 = "brg";
+
+            $scan0 = array(
+                'kode_user'=>$kode_user,
+                'brg'=>$scanner,
+                'status'=>$brg0
+            );        
+
+            return view('manual', ['scan'=>$scan0]);
         }
-        
     }
 
     public function storer(Request $request)
@@ -802,10 +859,11 @@ class Scanner extends Controller
                 ->where('status', "belum")
                 ->get();
 
-
+            $status = "";
             $scan = array(
                     'kode_user'=>$kode_user,
                     'brg'=>$scanner,
+                    'status'=>$status
             );
 
             return view('return', ['scan'=>$scan]);
@@ -830,12 +888,17 @@ class Scanner extends Controller
 
         $c_ids = count($s_ids);
 
+        $scanner = DB::table('tbdetil')
+            ->select('*')
+            ->where('kode_user', $kode_user)
+            ->where('status', "belum")
+            ->get();
+
             if($all==""){
                 if($c_ids!=0){
                     $select_if = DB::table('tbdetil')->select('*')->where('id', $id)->get();
 
                     $select_count = count($select_if);
-
                     if($select_count!=0){
 
                         $qty_get = $request->qty;
@@ -847,7 +910,20 @@ class Scanner extends Controller
                         $qty = $qty_database-$qty_get;
 
                         if($qty<0){
-                            return redirect('/idr')->with('gagal','gagal');
+                            $scanner = DB::table('tbdetil')
+                            ->select('*')
+                            ->where('kode_user', $kode_user)
+                            ->where('status', "belum")
+                            ->get();
+
+                            $gagal = "gagal";
+
+                            $scan = array(
+                            'kode_user'=>$kode_user,
+                            'brg'=>$scanner,
+                            'status'=>$gagal
+                        );                        
+                            return view('return', ['scan'=>$scan]);
                         }
                         $date = Carbon::now();
 
@@ -887,13 +963,57 @@ class Scanner extends Controller
                             DB::table('tbdetil')->where('id',$id)->update($statusarr);
                         }
                         
-                        return redirect('/idr')->with('berhasil','berhasil');
+                    $scanner = DB::table('tbdetil')
+                        ->select('*')
+                        ->where('kode_user', $kode_user)
+                        ->where('status', "belum")
+                        ->get();
+                    $berhasil = "berhasil";
+                    
+
+                    $scanb = array(
+                        'kode_user'=>$kode_user,
+                        'brg'=>$scanner,
+                        'status'=>$berhasil
+                    );
+
+        
+                    return view('return', ['scan'=>$scanb]);
 
                     }else{
-                        return redirect('/idr')->with('gagal', 'gagal');
+
+                        $scanner = DB::table('tbdetil')
+                            ->select('*')
+                            ->where('kode_user', $kode_user)
+                            ->where('status', "belum")
+                            ->get();
+
+                        $gagal = "gagal";
+
+                        $scan = array(
+                        'kode_user'=>$kode_user,
+                        'brg'=>$scanner,
+                        'status'=>$gagal
+                    );                        
+                        return view('return', ['scan'=>$scan]);
                     }
                 }else{
-                    return redirect('/idr')->with('id', 'id');
+
+                    $scanner = DB::table('tbdetil')
+                        ->select('*')
+                        ->where('kode_user', $kode_user)
+                        ->where('status', "belum")
+                        ->get();
+
+                    $brg0 = "brg";
+
+                    $scan0 = array(
+                        'kode_user'=>$kode_user,
+                        'brg'=>$scanner,
+                        'status'=>$brg0
+                    );        
+
+                    return view('return', ['scan'=>$scan0]);
                 }
             }else{
                     $select = DB::table('tbdetil')
@@ -904,52 +1024,70 @@ class Scanner extends Controller
 
                     $count = count($select);
 
-                    $i = 0;
+                    if($count != 0){
+                        $i = 0;
 
-                    for ($i; $i < $count ; $i++) { 
-                        
-                        for($a=0; $a < $count; $a++){
-                            $id = $select[$i]->id;
+                        for ($i; $i < $count ; $i++) { 
+                            
+                            for($a=0; $a < $count; $a++){
+                                $id = $select[$i]->id;
+                            }
+
+                            $date = Carbon::now();
+
+                            $date->toDateTimeString();
+                            $tgl_kembali = $date->format('Y-m-d H:i:s');
+
+                            $status = "sudah";
+                            
+                            for($b=0; $b < $count; $b++){
+                                $qty = $select[$i]->qty;
+                            }
+
+                            for($c=0; $c < $count; $c++){
+                                $kodbar = $select[$i]->kodebarang;
+                            }
+
+                            $brg = DB::table('tbbarang')->select('qty')->where('kodebarang', $kodbar)->get();
+
+                            $qtybrg = $brg[0]->qty;
+
+                            $qty_akhir = $qtybrg+$qty;
+
+                            $qtyup = array(
+                                'qty'=>$qty_akhir
+                            );
+
+                            DB::table('tbbarang')->where('kodebarang', $kodbar)->update($qtyup);
+                         
+                            $qty = 0;
+                            $data = array(
+                                'qty'=>$qty,
+                                'tgl_kembali'=> $tgl_kembali,
+                                'status'=> $status,
+                            );
+
+                            DB::table('tbdetil')->where('id', $id)->update($data);
                         }
-
-                        $date = Carbon::now();
-
-                        $date->toDateTimeString();
-                        $tgl_kembali = $date->format('Y-m-d H:i:s');
-
-                        $status = "sudah";
-                        
-                        for($b=0; $b < $count; $b++){
-                            $qty = $select[$i]->qty;
-                        }
-
-                        for($c=0; $c < $count; $c++){
-                            $kodbar = $select[$i]->kodebarang;
-                        }
-
-                        $brg = DB::table('tbbarang')->select('qty')->where('kodebarang', $kodbar)->get();
-
-                        $qtybrg = $brg[0]->qty;
-
-                        $qty_akhir = $qtybrg+$qty;
-
-                        $qtyup = array(
-                            'qty'=>$qty_akhir
-                        );
-
-                        DB::table('tbbarang')->where('kodebarang', $kodbar)->update($qtyup);
-                     
-                        $qty = 0;
-                        $data = array(
-                            'qty'=>$qty,
-                            'tgl_kembali'=> $tgl_kembali,
-                            'status'=> $status,
-                        );
-
-                        DB::table('tbdetil')->where('id', $id)->update($data);
+                        return redirect('/idr')->with('berhasil','berhasil');
                     }
-                    return redirect('/idr')->with('berhasil','berhasil');
-                }
+                    else{
+                        $scanner = DB::table('tbdetil')
+                            ->select('*')
+                            ->where('kode_user', $kode_user)
+                            ->where('status', "belum")
+                            ->get();
+
+                        $brg0 = "brg";
+
+                        $scan = array(
+                        'kode_user'=>$kode_user,
+                        'brg'=>$scanner,
+                        'status'=>$brg0
+                    );                        
+                        return view('return', ['scan'=>$scan]);
+                    }
+            }
     }
 
     public function login(Request $request)
@@ -968,8 +1106,21 @@ class Scanner extends Controller
         if($count!=0){
             $nama = $select[0]->nama;
             $kod_user = $select[0]->kode_user;
+
+            $date = Carbon::now();
+
+            $date->toDateTimeString();
+            $waktu = $date->format('Y-m-d H:i:s');
+
             session(['nama' => $nama]);
             session(['kode_user' => $kod_user]);
+
+            $array = array(
+                'terakhir_login'=>$waktu
+            );
+
+            DB::table('tbadmin')->select('*')->where('kode_user', $kode_user)->update($array);
+
             return redirect('/admin');
 
         }else{
@@ -983,6 +1134,17 @@ class Scanner extends Controller
     {
         $kode_session = $request->kode_session;
         $nama_session = $request->nama_session;
+
+        $date = Carbon::now();
+
+        $date->toDateTimeString();
+        $waktu = $date->format('Y-m-d H:i:s');
+
+        $array = array(
+            'terakhir_logout'=>$waktu
+        );
+
+        DB::table('tbadmin')->select('*')->where('kode_user', $kode_session)->update($array);
 
         $request->session()->forget(['kode_user', $kode_session]);
         $request->session()->forget(['nama', $nama_session]);
@@ -1019,9 +1181,9 @@ class Scanner extends Controller
 
             DB::table('tbbarang')->insert($data);
 
-            return redirect('/admin')->with('berhasilbrg', 'berhasilbrg');
+            return redirect('/admin')->with('alert', 'berhasilbrg');
         }else{
-            return redirect('/admin')->with('gagalbrg', 'gagalbrg');
+            return redirect('/admin')->with('alert', 'gagalbrg');
         }
     }
 
@@ -1045,9 +1207,9 @@ class Scanner extends Controller
 
             DB::table('tbadmin')->insert($data);
 
-            return redirect('/admin')->with('berhasiladm', 'berhasiladm');
+            return redirect('/admin')->with('alert', 'berhasiladm');
         }else{
-            return redirect('/admin')->with('gagaladm', 'gagaladm');
+            return redirect('/admin')->with('alert', 'gagaladm');
         }
     }
 
@@ -1071,9 +1233,9 @@ class Scanner extends Controller
 
             DB::table('tbuser')->insert($data);
 
-            return redirect('/admin')->with('berhasiluser', 'berhasiluser');
+            return redirect('/admin')->with('alert', 'berhasiluser');
         }else{
-            return redirect('/admin')->with('gagaluser', 'gagaluser');
+            return redirect('/admin')->with('alert', 'gagaluser');
         }
     }
 
@@ -1194,7 +1356,7 @@ class Scanner extends Controller
 
         DB::table('tbbarang')->select('*')->where('kodebarang', $kodebarang)->update($data);
 
-        return redirect('/admin')->with('showbrg', 'showbrg');
+        return redirect('/admin')->with('alert', 'showbrg');
     }
 
     public function updateadm(Request $request, $id)
@@ -1225,7 +1387,7 @@ class Scanner extends Controller
 
                 session(['nama' => $nama_select]);
 
-                return redirect('/admin')->with('showadm', 'showadm');
+                return redirect('/admin')->with('alert', 'showadm');
 
             }else{
                 return redirect('/admin');
@@ -1236,7 +1398,7 @@ class Scanner extends Controller
 
         DB::table('tbadmin')->select('*')->where('kode_user', $kodeuser)->update($data);
 
-        return redirect('/admin')->with('showadm', 'showadm');
+        return redirect('/admin')->with('alert', 'showadm');
 
     }
 
@@ -1253,7 +1415,7 @@ class Scanner extends Controller
 
         DB::table('tbuser')->select('*')->where('kode_user', $kodeuser)->update($data);
 
-        return redirect('/admin')->with('showuser', 'showuser');
+        return redirect('/admin')->with('alert', 'showuser');
     }
 
     /**
@@ -1266,7 +1428,7 @@ class Scanner extends Controller
     {
         DB::table('tbbarang')->select('*')->where('kodebarang', $id)->delete();
 
-        return redirect('/admin')->with('showbrg', 'showbrg');
+        return redirect('/admin')->with('alert', 'showbrg');
     }
 
     public function destroyadm(Request $request, $id)
@@ -1292,27 +1454,27 @@ class Scanner extends Controller
         DB::table('tbadmin')->select('*')->where('kode_user', $id)->delete();
         }
 
-        return redirect('/admin')->with('showadm', 'showadm');
+        return redirect('/admin')->with('alert', 'showadm');
     }
 
     public function destroyuser($id)
     {
         DB::table('tbuser')->select('*')->where('kode_user', $id)->delete();
 
-        return redirect('/admin')->with('showuser', 'showuser');
+        return redirect('/admin')->with('alert', 'showuser');
     }
 
     public function deleteiden($id)
     {
         DB::table('tbidentity')->select('*')->where('kode_user', $id)->delete();
 
-        return redirect('/admin')->with('showiden', 'showiden');
+        return redirect('/admin')->with('alert', 'showiden');
     }
 
     public function deleteitem($id)
     {
         DB::table('tbitem')->select('*')->where('id', $id)->delete();
 
-        return redirect('/admin')->with('showitem', 'showitem');
+        return redirect('/admin')->with('alert', 'showitem');
     }
 }

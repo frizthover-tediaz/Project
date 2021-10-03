@@ -11,6 +11,7 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	
 	<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree&display=swap" rel="stylesheet">
+
 	<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@700&display=swap" rel="stylesheet">
 
     <link href="css/style.css" rel="stylesheet">
@@ -20,7 +21,7 @@
     	<nav class="navbar navbar-expand-lg navbar-light bg-light" style="justify-content:space-between !important; background-color: transparent!important; ">
 			<ul class="navbar-nav mr-auto">
 		        <li class="nav-item">
-			        <a class="nav-link active" href="#"><img src="img/logo.png"></a>
+			        <a class="nav-link active" href="/"><img src="img/logo.png"></a>
 	     	    </li>
 			</ul>
 			<form id="form-e" method="POST" action="{{ url('/ide') }}">
@@ -34,8 +35,20 @@
 			    </li>
 			</ul>
 			</form>
-
 		</nav>
+
+		@if($scan['status'] == 'gagal')
+	        <input type="hidden" id="alert" value="{{$scan['status']}}"> 
+	    @endif
+
+	    @if($scan['status'] == 'brg')
+	        <input type="hidden" id="alert" value="{{$scan['status']}}"> 
+	    @endif
+
+	    @if($scan['status'] == 'berhasil')
+	        <input type="hidden" id="alert" value="{{$scan['status']}}"> 
+	    @endif
+
 	<div class="main-content">
 	    <center>
 	    	<div class="border">
@@ -49,7 +62,7 @@
 		    					<td>:</td>
 		    					<td class="width"></td>
 		    					<td>
-		    						<input class="forme" list="brow" name="id" id="br">
+		    						<input class="forme" list="brow" name="id" id="br" required>
 									<datalist id="brow">
 										@foreach($scan['brg'] as $p)
 										<option value="{{ $p->id }}">Kode Barang: {{ $p->kodebarang }} Nama: {{ $p->nama_barang }} Qty: {{ $p->qty }} Lokasi: {{ $p->lokasi }}</option>
@@ -62,7 +75,7 @@
 		    					<td>Qty</td>
 		    					<td>:</td>
 		    					<td class="width"></td>
-		    					<td><input class="forme" type="number" id="qty" name="qty" min="0" oninput="validity.valid||(value='');" value=""></td>
+		    					<td><input class="forme" type="number" id="qty" name="qty" min="0" oninput="validity.valid||(value='');" value="" required></td>
 		    				</tr>
 		    				<tr class="height"></tr>
 		    				<tr>
@@ -84,5 +97,7 @@
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="js/check.js"></script>
+	<script src="js/alert.js"></script>
+
   </body>
 </html>

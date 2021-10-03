@@ -20,7 +20,7 @@
     	<nav class="navbar navbar-expand-lg navbar-light bg-light" style="justify-content:space-between !important; background-color: transparent!important; ">
 			<ul class="navbar-nav mr-auto">
 		        <li class="nav-item">
-			        <a class="nav-link active" href="#"><img src="img/logo.png"></a>
+			        <a class="nav-link active" href="/"><img src="img/logo.png"></a>
 	     	    </li>
 			</ul>
 			<form id="form-e" method="POST" action="{{ url('/ide') }}">
@@ -37,6 +37,13 @@
 		</nav>
 	<div class="main-content">
 	    <center>
+	    	@if($scan['status'] == 'gagal')
+	        <input type="hidden" id="alert" value="{{$scan['status']}}"> 
+		    @endif
+
+		    @if($scan['status'] == 'brg')
+		        <input type="hidden" id="alert" value="{{$scan['status']}}"> 
+		    @endif
 	    	<div class="border">
 	    		<div class="mcontent">
 	    			<form action="{{ url('/man') }}" method="POST">
@@ -48,7 +55,7 @@
 		    					<td>:</td>
 		    					<td class="width"></td>
 		    					<td>
-		    						<input class="forme" list="brow" name="kodebarang">
+		    						<input class="forme" list="brow" name="kodebarang" required>
 									<datalist id="brow">
 										@foreach($scan['brg'] as $p)
 										<option value="{{ $p->kodebarang}}">{{$p->nama}}</option>
@@ -61,7 +68,7 @@
 		    					<td>Qty</td>
 		    					<td>:</td>
 		    					<td class="width"></td>
-		    					<td><input class="forme" type="number" name="qty" min="0" oninput="validity.valid||(value='');" value=""></td>
+		    					<td><input class="forme" type="number" name="qty" min="0" oninput="validity.valid||(value='');" value="" required></td>
 		    				</tr>		
 		    			</table>
 		    			<div class="btns">
@@ -73,5 +80,7 @@
 	    </center>
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="js/alert.js"></script>
+
   </body>
 </html>

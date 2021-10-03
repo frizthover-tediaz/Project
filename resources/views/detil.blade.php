@@ -20,7 +20,7 @@
     	<nav class="navbar navbar-expand-lg navbar-light bg-light" style="justify-content:space-between !important; background-color: transparent!important; ">
 			<ul class="navbar-nav mr-auto">
 		        <li class="nav-item">
-			        <a class="nav-link active" href="#"><img src="img/logo.png"></a>
+			        <a class="nav-link active" href="/"><img src="img/logo.png"></a>
 	     	    </li>
 			</ul>			    
 			<form id="form-e" method="POST" action="{{ url('/ide') }}">
@@ -30,8 +30,9 @@
 			    <li class="nav-item">
 			        <button  name="valid" id="valid" value="Scan" class="buttonnav">Scan Lagi?</button>
 			    </li>
+			    <input type="hidden" name="kode_user" value="{{ $data['kode_user'] }}">
 			    <li class="nav-item">
-			        <button  name="valid" id="valid" value="Manual" class="buttonnav">Manual</button>
+			        <button  name="valid" id="valid" value="Manuals" class="buttonnav">Manual</button>
 			    </li>
 				
 			</ul>

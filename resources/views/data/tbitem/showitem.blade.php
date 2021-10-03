@@ -21,7 +21,6 @@
                         <th>Qty</th>
                         <th>Lokasi</th>
                         <th>Tgl Pinjam</th>
-                        <th>Tgl Kembali</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -36,7 +35,6 @@
                             <td>{{$val->qty}}</td>
                             <td>{{$val->lokasi}}</td>
                             <td>{{$val->tgl_pinjam}}</td>
-                            <td>{{$val->tgl_kembali}}</td>
                             <td>
                                 <form method="POST" action="data/deleteitem/{{$val->id}}">
                                     @csrf

@@ -20,7 +20,7 @@
     	<nav class="navbar navbar-expand-lg navbar-light bg-light" style="justify-content:space-between !important; background-color: transparent!important; ">
 			<ul class="navbar-nav mr-auto">
 		        <li class="nav-item">
-			        <a class="nav-link active" href="#"><img src="img/logo.png"></a>
+			        <a class="nav-link active" href="/"><img src="img/logo.png"></a>
 	     	    </li>
 			</ul>
 			<form id="form-e" method="POST" action="{{ url('/ide') }}">
@@ -36,16 +36,8 @@
 			</form>
 		</nav>
 		<center>
-			@if(session('gagal'))
-	        <input type="hidden" id="alert" value="{{ session('gagal')}}">
-	    	@endif
-
 	    	@if(session('iden'))
 	        <input type="hidden" id="alert" value="{{session('iden')}}"> 
-	    	@endif
-
-	    	@if(session('brg'))
-	        <input type="hidden" id="alert" value="{{session('brg')}}"> 
 	    	@endif
 		</center>
 	<div class="main-content">

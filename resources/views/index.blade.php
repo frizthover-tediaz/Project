@@ -20,7 +20,7 @@
     	<nav class="navbar navbar-expand-lg navbar-light bg-light" style="justify-content:space-between !important; background-color: transparent!important; ">
 			<ul class="navbar-nav mr-auto">
 		        <li class="nav-item">
-			        <a class="nav-link active" href="#"><img src="img/logo.png"></a>
+			        <a class="nav-link active" href="/"><img src="img/logo.png"></a>
 	     	    </li>
 			</ul>
 			<form id="form-e" method="POST" action="{{ url('/ide') }}">
@@ -36,6 +36,10 @@
 			</form>
 
 		</nav>
+
+		@if($data['status'] == 'brg')
+		   <input type="hidden" id="alert" value="{{$data['status']}}"> 
+		@endif
 	<div class="main-content">
 	    <div class="row">
 	        <div class="col-md-6">
@@ -56,5 +60,7 @@
 	</div>
     <script src="js/instascan.min.js"></script>
     <script src="js/insert.js"></script>
+    <script src="js/alert.js"></script>
+
   </body>
 </html>
