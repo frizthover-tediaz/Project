@@ -93,7 +93,7 @@
 		    		</table>
 		    		<center>
 		    			<div class="marg">
-		    				<button class="buttonnav">Selesai</button>
+		    				<button class="buttonnav" style="padding:.5%">Selesai</button>
 		    			</div>
 		    		</center>
 	    		</form>

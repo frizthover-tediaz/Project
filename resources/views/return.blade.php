@@ -62,7 +62,7 @@
 		    					<td>:</td>
 		    					<td class="width"></td>
 		    					<td>
-		    						<input class="forme" list="brow" name="id" id="br" required>
+		    						<input class="form-control" list="brow" name="id" id="br" required>
 									<datalist id="brow">
 										@foreach($scan['brg'] as $p)
 										<option value="{{ $p->id }}">Kode Barang: {{ $p->kodebarang }} Nama: {{ $p->nama_barang }} Qty: {{ $p->qty }} Lokasi: {{ $p->lokasi }}</option>
@@ -75,7 +75,7 @@
 		    					<td>Qty</td>
 		    					<td>:</td>
 		    					<td class="width"></td>
-		    					<td><input class="forme" type="number" id="qty" name="qty" min="0" oninput="validity.valid||(value='');" value="" required></td>
+		    					<td><input class="form-control" type="number" id="qty" name="qty" min="0" oninput="validity.valid||(value='');" value="" required></td>
 		    				</tr>
 		    				<tr class="height"></tr>
 		    				<tr>
