@@ -31,13 +31,17 @@
                             <td>{{$val->terakhir_login}}</td>
                             <td>{{$val->terakhir_logout}}</td>
                             <td>
-                                <button type="button" id="edit" name="ubah" class="btn btn-success btn-sm w-100" onclick="editTbadmin('{{$val->kode_user}}')"> <i class="fa fa-edit"></i> Edit </button></a>
-
-                                <form method="POST" action="data/deleteadm/{{$val->kode_user}}">
+                                <form method="POST" action="/dataeditadm">
                                     @csrf
-                                    @method('DELETE')
+                                    <input type="hidden" name="kode_user" value="{{$val->kode_user}}">
+                                    <button id="edit" name="ubah" class="btn btn-success btn-sm w-100"> <i class="fa fa-edit"></i> Edit </button></a>
+                                </form>
+
+                                <form method="POST" action="/datadltadms">
+                                    @csrf
                                     <input type="hidden" name="nama_session" value="{{Session::get('nama')}}">
                                     <input type="hidden" name="kode_session" value="{{Session::get('kode_user')}}">
+                                    <input type="hidden" name="kode_user" value="{{$val->kode_user}}">
                                     <button id="delete" name="hapus" class="btn btn-danger btn-sm w-100 mt-1"> <i class="fa fa-trash"></i> Hapus </button>
                                 </form>
                             </td>

@@ -28,11 +28,14 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma:wght@400&display=swap" rel="stylesheet">
-
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"/>
     <!-- Custom styles for this -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.css">
+
+
 
 </head>
 <html lang="en">
@@ -168,7 +171,7 @@
 					<div class="alert alert-success" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Berhasil Diproses!</div>
 
 					@elseif(session('gagaladm'))
-					<div class="alert alert-danger" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Tidak Berhasil Diproses!</div>
+					<div class="alert alert-danger" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Gagal Diproses!</div>
 			    	@endif
 
                     <h1 class="h3 mb-5 text-gray-800">Insert Admin</h1>
@@ -194,7 +197,9 @@
 					        <div class="col-sm-3">
 					        	<div class="form-group">
 									<label>Password</label><br>
-									<input type="text" name="pass" class="form-control" required value="">
+									<input type="password" id="pass" name="pass" class="form-control" required value="">
+
+                                    <i class="bi bi-eye-slash" id="togglePassword" style="cursor:pointer;position: absolute;top: 41%; right: 10%" onclick="toggle()"></i>
 								</div>
 					        </div>
 						</div>
@@ -271,6 +276,7 @@
     <script src="js/tbidentity.js"></script>
     <script src="js/tbitem.js"></script>
     <script src="js/tbdetil.js"></script>
+    <script src="js/toggle.js"></script>
 	
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.js"></script>
 </body>

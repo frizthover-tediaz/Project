@@ -29,6 +29,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma:wght@400&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"/>
     <!-- Custom styles for this -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
@@ -231,7 +232,8 @@
     <script src="js/tbidentity.js"></script>
     <script src="js/tbitem.js"></script>
     <script src="js/tbdetil.js"></script>
-	
+    <script src="js/toggle.js"></script>
+    
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.js"></script>
 </body>
 </html>

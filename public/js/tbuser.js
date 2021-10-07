@@ -33,33 +33,3 @@ function showTbuser() {
     xhttp.open("GET", url, true);
     xhttp.send();
 };
-
-function editTbuser(id) {
-    var url = "data/edituser"+'/'+id;
-    var xhttp;
-
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            data = this.responseText;
-            document.getElementById("data").innerHTML = data;
-        };
-    };
-    xhttp.open("GET", url, true);
-    xhttp.send();
-}
-
-function deleteTbuser(id) {
-    var url = "data/deleteuser"+'/'+id;
-    var xhttp;
-
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            data = this.responseText;
-            document.getElementById("data").innerHTML = data;
-        };
-    };
-    xhttp.open("GET", url, true);
-    xhttp.send();
-}

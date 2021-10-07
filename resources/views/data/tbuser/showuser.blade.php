@@ -27,11 +27,15 @@
                             <td>{{$val->nama}}</td>
                             <td>{{$val->ket}}</td>
                             <td>
-                                <button type="button" id="edit" name="ubah" class="btn btn-success btn-sm w-100" onclick="editTbuser('{{$val->kode_user}}')"> <i class="fa fa-edit"></i> Edit </button></a>
-
-                                <form method="POST" action="data/deleteuser/{{$val->kode_user}}">
+                                <form method="POST" action="/dataedituser">
                                     @csrf
-                                    @method('DELETE')
+                                    <input type="hidden" name="kode_user" value="{{$val->kode_user}}">
+                                    <button id="edit" name="ubah" class="btn btn-success btn-sm w-100"> <i class="fa fa-edit"></i> Edit </button></a>
+                                </form>
+
+                                <form method="POST" action="/datadltuser">
+                                    @csrf
+                                    <input type="hidden" name="kode_user" value="{{$val->kode_user}}">
                                     <button id="delete" name="hapus" class="btn btn-danger btn-sm w-100 mt-1"> <i class="fa fa-trash"></i> Hapus </button>
                                 </form>
                             </td>

@@ -1322,18 +1322,22 @@ class Scanner extends Controller
         return view('data.tbbarang.edit', ['data'=> $data]);
     }
 
-    public function editadm($id)
+    public function editadm(Request $request)
     {
-        $data = DB::table('tbadmin')->select('*')->where('kode_user', $id)->get();
+        $kode_user = $request->kode_user;
 
-        return view('data.tbadmin.editadmin', ['data'=> $data])->with('editadm', 'editadm');
+        $data = DB::table('tbadmin')->select('*')->where('kode_user', $kode_user)->get();
+
+        return view('data.tbadmin.editadmin', ['data'=> $data]);
     }
 
-    public function edituser($id)
+    public function edituser(Request $request)
     {
-        $data = DB::table('tbuser')->select('*')->where('kode_user', $id)->get();
+        $kode_user = $request->kode_user;
 
-        return view('data.tbuser.edituser', ['data'=> $data])->with('edituser', 'edituser');
+        $data = DB::table('tbuser')->select('*')->where('kode_user', $kode_user)->get();
+
+        return view('data.tbuser.edituser', ['data'=> $data]);
     }
 
     /**
@@ -1379,7 +1383,7 @@ class Scanner extends Controller
         }
     }
 
-    public function updateadm(Request $request, $id)
+    public function updateadm(Request $request)
     {
         $kodeuser = $request->kodeuser;
         $nama = $request->nama;
@@ -1398,7 +1402,7 @@ class Scanner extends Controller
 
                 $select = DB::table('tbadmin')
                     ->select('*')
-                    ->where('kode_user', $id)
+                    ->where('kode_user', $kodeuser)
                     ->get();
 
                 $nama_select = $select[0]->nama;
@@ -1407,22 +1411,36 @@ class Scanner extends Controller
 
                 session(['nama' => $nama_select]);
 
-                return redirect('/admin')->with('alert', 'showadm');
+                $db = DB::table('tbadmin')->select('*')->get();
+
+                $status = "bupd";
+                $array = array(
+                    'status'=>$status
+                );
+                return view('data.tbadmin.dltadm', ['data'=> $db, 'status'=>$array]);
 
             }else{
-                return redirect('/admin');
+                $status = "gupd";
+                $array = array(
+                    'status'=>$status
+                );
+                return view('data.tbadmin.dltadm', ['data'=> $db, 'status'=>$array]);
             }
         }else{
-            //
-        }
+            DB::table('tbadmin')->select('*')->where('kode_user', $kodeuser)->update($data);
 
-        DB::table('tbadmin')->select('*')->where('kode_user', $kodeuser)->update($data);
+            $db = DB::table('tbadmin')->select('*')->get();
 
-        return redirect('/admin')->with('alert', 'showadm');
+            $status = "bupd";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbadmin.dltadm', ['data'=> $db, 'status'=>$array]);
+        };
 
     }
 
-    public function updateuser(Request $request, $id)
+    public function updateuser(Request $request)
     {
         $kodeuser = $request->kodeuser;
         $nama = $request->nama;
@@ -1433,9 +1451,27 @@ class Scanner extends Controller
             'ket'=>$ket
         );
 
-        DB::table('tbuser')->select('*')->where('kode_user', $kodeuser)->update($data);
+        $db = DB::table('tbuser')->select('*')->where('kode_user', $kodeuser)->get();
+        $count = count($db);
 
-        return redirect('/admin')->with('alert', 'showuser');
+        if($count==0){
+            $status = "gupd";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbuser.dltuser', ['data'=> $db, 'status'=>$array]);
+        }else{
+            DB::table('tbuser')->select('*')->where('kode_user', $kodeuser)->update($data);
+
+            $db = DB::table('tbuser')->select('*')->get();
+
+            $status = "bupd";
+            $array = array(
+                'status'=>$status
+            );
+
+            return view('data.tbuser.dltuser', ['data'=> $db, 'status'=>$array]);
+        };
     }
 
     /**
@@ -1475,50 +1511,150 @@ class Scanner extends Controller
         
     }
 
-    public function destroyadm(Request $request, $id)
+    public function destroyadm(Request $request)
     {   
         $kode_session = $request->kode_session;
         $nama_session = $request->nama_session;
+        $kode_user = $request->kode_user;
         $nama = $request->nama;
 
         $select = DB::table('tbadmin')
             ->select('*')
-            ->where('kode_user', $id)
+            ->where('kode_user', $kode_user)
             ->get();
+
+
+        $select_count = count($select);
+
+        $s_old = DB::table('tbadmin')->select('*')->get();
+
+        if($select_count==0){
+            $status="gagal";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbadmin.dltadm', ['data'=>$s_old, 'status'=>$array]);
+        };
+
+        $c_old = count($s_old);
 
         $nama_select = $select[0]->nama;
 
-        if($kode_session != $id){
-            DB::table('tbadmin')->select('*')->where('kode_user', $id)->delete();
+        if($kode_session != $kode_user){
+            DB::table('tbadmin')->select('*')->where('kode_user', $kode_user)->delete();
         }else{
 
         $request->session()->forget(['kode_user', $kode_session]);
         $request->session()->forget(['nama', $nama_session]);
 
-        DB::table('tbadmin')->select('*')->where('kode_user', $id)->delete();
+        DB::table('tbadmin')->select('*')->where('kode_user', $kode_user)->delete();
         }
 
-        return redirect('/admin')->with('alert', 'showadm');
+        $s_new = DB::table('tbadmin')->select('*')->get();
+
+        $c_new = count($s_new);
+
+        if($c_new<$c_old){
+            $status = "berhasil";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbadmin.dltadm', ['data'=>$s_new, 'status'=>$array]);
+        }else{
+            $status="gagal";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbadmin.dltadm', ['data'=>$s_old, 'status'=>$array]);
+        };
     }
 
-    public function destroyuser($id)
+    public function destroyuser(Request $request)
     {
-        DB::table('tbuser')->select('*')->where('kode_user', $id)->delete();
+        $kode_user = $request->kode_user;
 
-        return redirect('/admin')->with('alert', 'showuser');
+        $dbold = DB::table('tbuser')->select('*')->get();
+
+        $countold = count($dbold);
+
+        DB::table('tbuser')->select('*')->where('kode_user', $kode_user)->delete();
+
+        $dbnew = DB::table('tbuser')->select('*')->get();
+
+        $countnew = count($dbnew);
+
+        if($countnew<$countold){
+            $status = "berhasil";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbuser.dltuser', ['data'=>$dbnew, 'status'=>$array]);
+        }else{
+            $status="gagal";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbuser.dltuser', ['data'=>$dbold, 'status'=>$array]);
+        };
+
     }
 
-    public function deleteiden($id)
+    public function deleteiden(Request $request)
     {
-        DB::table('tbidentity')->select('*')->where('kode_user', $id)->delete();
+        $id = $request->id;
 
-        return redirect('/admin')->with('alert', 'showiden');
+        $dbold = DB::table('tbidentity')->select('*')->get();
+
+        $countold = count($dbold);
+
+        DB::table('tbidentity')->select('*')->where('id', $id)->delete();
+
+        $dbnew = DB::table('tbidentity')->select('*')->get();
+
+        $countnew = count($dbnew);
+
+
+        if($countnew<$countold){
+            $status = "berhasil";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbidentity.dltiden', ['data'=>$dbnew, 'status'=>$array]);
+        }else{
+            $status="gagal";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbidentity.dltiden', ['data'=>$dbold, 'status'=>$array]);
+        }
     }
 
-    public function deleteitem($id)
+    public function deleteitem(Request $request)
     {
+        $id = $request->id;
+
+        $dbold = DB::table('tbitem')->select('*')->get();
+
+        $countold = count($dbold);
+
         DB::table('tbitem')->select('*')->where('id', $id)->delete();
 
-        return redirect('/admin')->with('alert', 'showitem');
+        $dbnew = DB::table('tbitem')->select('*')->get();
+
+        $countnew = count($dbnew);
+
+        if($countnew<$countold){
+            $status = "berhasil";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbitem.dltitem', ['data'=>$dbnew, 'status'=>$array]);
+        }else{
+            $status="gagal";
+            $array = array(
+                'status'=>$status
+            );
+            return view('data.tbitem.dltitem', ['data'=>$dbold, 'status'=>$array]);
+        }
     }
 }

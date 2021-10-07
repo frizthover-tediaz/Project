@@ -164,62 +164,59 @@
                 </nav>
 
                 <div class="container-fluid" id="data">
-					@if(session('berhasilbrg'))
-					<div class="alert alert-success" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Berhasil Diproses!
-					</div>
+                    @if($status['status'] == 'berhasil')
+                        <div class="alert alert-success" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Berhasil Dihapus!
+                        </div>
 
-					@elseif(session('gagalbrg'))
-					<div class="alert alert-danger" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Gagal Diproses!
-					</div>
-			    	@endif
-
-			    	<h1 class="h3 mb-5 text-gray-800">Insert Barang</h1>
+                    @elseif($status['status'] == 'gagal')
+                        <div class="alert alert-danger" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Gagal Dihapus!
+                        </div>
                     
-					<form method="POST" action="{{url('/data/savebrg')}}" class="form-data" id="form-data">  
-					    @csrf
-						<input type="hidden" id="id" name="">
-						<div class="row">
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label>Kode Barang</label>
-									<input type="text" name="kodebarang" class="form-control" required value="">
-								</div>
-							</div>
+                    @endif
+			    	<div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Data Item</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered display" id="myTable" width="100%" cellspacing="0" style="text-align: center">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Kode User</th>
+                                            <th>Kode Barang</th>
+                                            <th>Nama</th>
+                                            <th>Qty</th>
+                                            <th>Lokasi</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
 
-					        <div class="col-sm-3">
-					        	<div class="form-group">
-									<label>Nama</label>
-									<input type="text" name="nama" class="form-control" required value="">
-								</div>
-					        </div>
+                                    <tbody>
+                                        @foreach($data as $val)
+                                            <tr>
+                                                <td>{{$val->id}}</td>
+                                                <td>{{$val->kode_user}}</td>
+                                                <td>{{$val->kodebarang}}</td>
+                                                <td>{{$val->nama}}</td>
+                                                <td>{{$val->qty}}</td>
+                                                <td>{{$val->lokasi}}</td>
+                                                <td>
+                                                    <form method="POST" action="/datadltitem">
+                                                        @csrf
+                                                        <input type="hidden" name="id" value="{{$val->id}}">
+                                                        <button id="delete" name="hapus" class="btn btn-danger btn-sm w-100 mt-1"> <i class="fa fa-trash"></i> Hapus </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
-					        <div class="col-sm-3">
-					        	<div class="form-group">
-									<label>Qty</label><br>
-									<input type="number" name="qty" class="form-control" required min="0" oninput="validity.valid||(value='');" value="">
-								</div>
-					        </div>
-
-					        <div class="col-sm-3">
-					            <div class="form-group">
-					                <label>Lokasi</label><br>
-					                <input type="text" name="lokasi" class="form-control" required value="">
-					            </div>
-					        </div>
-						</div>
-						
-						<div class="form-group" style="display: flex;">
-							<button name="simpan" id="simpan" class="btn btn-primary" style="margin-right: 1%">
-								<i class="fa fa-save"></i> Save
-							</button>
-
-							<button type="button" name="clear" id="clear" class="btn btn-warning" onclick="loadTbbarang()">
-								<i class="fa fa-trash"></i> Clear
-							</button>
-						</div>
-					</form>
                 </div>
-
             </div>
 
             <footer class="sticky-footer bg-white">
@@ -281,5 +278,11 @@
     <script src="js/tbdetil.js"></script>
 	
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.js"></script>
+
+    <script type="text/javascript">
+            $(document).ready( function () {
+            $('#myTable').DataTable();
+        } );
+    </script>
 </body>
 </html>

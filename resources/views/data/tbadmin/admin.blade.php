@@ -28,9 +28,11 @@
         <div class="col-sm-3">
         	<div class="form-group">
 				<label>Password</label><br>
-				<input type="text" name="pass" class="form-control" required value="">
+					<input type="password" id="pass" name="pass" class="form-control" required value="">
+					<i class="bi bi-eye-slash" id="togglePassword" style="cursor:pointer;position: absolute;top: 41%; right: 10%" onclick="toggle()"></i>
 			</div>
         </div>
+
 	</div>
 	
 	<div class="form-group" style="display: flex;">
@@ -44,3 +46,4 @@
 	</div>
 </form>
 
+<script src="js/toggle.js"></script>

@@ -54,7 +54,7 @@
 		    					<td>:</td>
 		    					<td class="width"></td>
 		    					<td>
-		    						<input class="forme" type="text" id="kode_user" name="kode_user" style="width: 100%;">
+		    						<input class="form-control" type="text" id="kode_user" name="kode_user" style="width: 100%;">
 		    					</td>
 		    				</tr>
 		    				<tr class="height"></tr>
@@ -62,9 +62,9 @@
 		    					<td>Password</td>
 		    					<td>:</td>
 		    					<td class="width"></td>
-		    					<td><input class="forme" type="password" id="pass" name="pass" style="width: 100%;">
+		    					<td><input class="form-control" type="password" id="pass" name="pass" style="width: 100%;">
 		    					<td class="width"></td>
-		    					<td><i class="bi bi-eye-slash" id="togglePassword" style="cursor:pointer;"></i></td>
+		    					<td><i class="bi bi-eye-slash" id="togglePassword" style="cursor:pointer;" onclick="toggle()"></i></td>
 		    				</tr>		
 		    			</table>
 		    			<div class="btns">

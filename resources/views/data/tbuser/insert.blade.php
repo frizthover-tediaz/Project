@@ -42,7 +42,7 @@
 
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-        	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+        	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
                 <div class="sidebar-brand-icon">
                     <img class="mini" src="img/logo_icon.png" style="width:2.5rem">
                 </div>
@@ -168,7 +168,7 @@
 					<div class="alert alert-success" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Berhasil Diproses!</div>
 
 					@elseif(session('gagaluser'))
-					<div class="alert alert-danger" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Tidak Berhasil Diproses!</div>
+					<div class="alert alert-danger" role="alert" style="width: 30%;text-align: left;padding: .5rem .5rem">Data Gagal Diproses!</div>
 			    	@endif
                     <h1 class="h3 mb-5 text-gray-800">Insert User</h1>
 

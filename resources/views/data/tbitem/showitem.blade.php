@@ -19,7 +19,6 @@
                         <th>Nama</th>
                         <th>Qty</th>
                         <th>Lokasi</th>
-                        <th>Tgl Pinjam</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -33,11 +32,10 @@
                             <td>{{$val->nama}}</td>
                             <td>{{$val->qty}}</td>
                             <td>{{$val->lokasi}}</td>
-                            <td>{{$val->tgl_pinjam}}</td>
                             <td>
-                                <form method="POST" action="data/deleteitem/{{$val->id}}">
+                                <form method="POST" action="/datadltitem">
                                     @csrf
-                                    @method('DELETE')
+                                    <input type="hidden" name="id" value="{{$val->id}}">
                                     <button id="delete" name="hapus" class="btn btn-danger btn-sm w-100 mt-1"> <i class="fa fa-trash"></i> Hapus </button>
                                 </form>
                             </td>
