@@ -17,8 +17,7 @@ class CreateTbadminTable extends Migration
             $table->integer('kode_user')->primary();
             $table->string('nama', 50);
             $table->string('pass', 50);
-            $table->dateTime('terakhir_login')->nullable()->default(null);;
-            $table->dateTime('terakhir-logout')->nullable()->default(null);;
+            $table->string('status', 50);
         });
     }
 

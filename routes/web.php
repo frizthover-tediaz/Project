@@ -21,6 +21,9 @@ Route::post('/ide', [Scanner::class, 'index0'] );
 
 Route::post('/item', [Scanner::class, 'store'] );
 
+Route::get('/item', function(){
+	return view('index');
+});
 Route::get('/barang', function(){
 	return view('index');
 });

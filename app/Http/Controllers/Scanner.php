@@ -80,6 +80,7 @@ class Scanner extends Controller
         $kode_user = $request->kode_user;
         $kodebarang = $request->thevalue;
 
+
         $se_brg = DB::table('tbbarang')
             ->select('*')
             ->where('kodebarang', $kodebarang)
@@ -88,6 +89,10 @@ class Scanner extends Controller
         $c_brg = count($se_brg);
 
         if($c_brg!=0){
+
+            if($request->session()->has('hasilscan')){
+                $request->session()->forget('hasilscan');
+            }
 
             $cari = DB::table('tbitem')
                 ->select('qty')
@@ -215,6 +220,9 @@ class Scanner extends Controller
                 return view('detil', ['data'=>$data]);
 
             }else{
+                if($request->session()->has('hasilscan')){
+                    $request->session()->forget('hasilscan');
+                }
                 $kodebarang = $request->thevalue;
 
                 $nama = DB::table('tbbarang')->select('nama')->where('kodebarang', $request->thevalue)->get();
@@ -338,12 +346,27 @@ class Scanner extends Controller
             }
         }else{
 
-            $status = "brg";
+            if($request->session()->has('hasilscan')){
+                $status = "NULL";
+
+                $data = array(
+                            'kode_user'=>$kode_user,
+                            'status'=>$status
+                );
+
+                $request->session()->forget('hasilscan');
+
+                return view('index', ['data'=>$data]);
+            }
+
+            $status = "gagal";
+            session(['hasilscan'=>$kodebarang]);
 
             $data = array(
                         'kode_user'=>$kode_user,
                         'status'=>$status
             );
+
             return view('index', ['data'=>$data]);
         }
     }
@@ -359,7 +382,7 @@ class Scanner extends Controller
             $nama = $select[0]->nama;
 
             $ket = $select[0]->ket;
-            $status = "";
+            
 
             $data = array(
                     'kode_user'=> $kode_user,
@@ -369,7 +392,8 @@ class Scanner extends Controller
 
             DB::table('tbidentity')->insert($data);
             
-
+            $status = "0";
+            
             $data = array(
                     'kode_user'=> $kode_user,
                     'status'=> $status
@@ -377,7 +401,7 @@ class Scanner extends Controller
 
             return view('index', ['data'=>$data]);
         }else{
-            return redirect('/')->with('iden', 'iden');
+            return back()->with('gagal', 'Identitasmu tidak terdaftar, Hubungi Admin Segera!');
         }
 
 
@@ -476,7 +500,8 @@ class Scanner extends Controller
             $qtybaru = $qtyb-$qtys;
 
             if($qtybaru<0){
-                 return redirect('/')->with('gagal','gagal');
+                DB::table('tbitem')->select('*')->where('kode_user', $kode_user)->where('kodebarang', $kodebarang)->delete();
+                return redirect('/')->with('gagaldetil','Maaf Qty anda melebihi stok yang ada. Coba Lagi!');
             }
             $data = array(
                     'kode_user'=>$kode_user,
@@ -503,7 +528,7 @@ class Scanner extends Controller
         DB::table('tbitem')->where('kode_user', $kode_user)->delete();
         DB::table('tbidentity')->where('kode_user', $kode_user)->delete();
 
-        return redirect('/')->with('berhasil','berhasil');
+        return redirect('/')->with('berhasil','Data Berhasil Diproses!');
     }
 
     public function storem(Request $request)
@@ -545,8 +570,8 @@ class Scanner extends Controller
             return view('manual', ['scan'=>$scan]);
 
         }else{
-            return redirect('/iden')->with('iden','iden');
-        }
+            return back()->with('gagal', 'Identitasmu tidak terdaftar, Hubungi Admin Segera!');        
+        };
         
     }
 
@@ -571,15 +596,52 @@ class Scanner extends Controller
                             ->select('*')
                             ->get();
 
+                if($request->session()->has('hasilscan1')){
+                    $status = "gagal";
+
+                    $scan = array(
+                                'kode_user'=>$kode_user,
+                                'brg'=>$scanner,
+                                'status'=>$status
+                    );
+
+                    $prev = $request->session()->get('hasilscan1');
+
+                    if($prev==$kodebarang){
+                        $status = "gagal";
+
+                        $scan = array(
+                                    'kode_user'=>$kode_user,
+                                    'brg'=>$scanner,
+                                    'status'=>$status
+                        );
+
+                        $request->session()->forget('hasilscan1');
+                        $request->session()->forget('hasilscan');
+
+                        return view('manual', ['scan'=>$scan]);
+                    }else{
+                        $request->session()->forget('hasilscan1');
+                        $request->session()->forget('hasilscan');
+
+                        session(['hasilscan1'=>$kodebarang]);
+
+                        return view('manual', ['scan'=>$scan]);
+                    };
+                    
+                };
+
                 $gagal = "gagal";
 
+                session(['hasilscan1'=>$kodebarang]);
+
                 $scan = array(
-                'kode_user'=>$kode_user,
-                'brg'=>$scanner,
-                'status'=>$gagal
-            );                        
+                    'kode_user'=>$kode_user,
+                    'brg'=>$scanner,
+                    'status'=>$gagal
+                );                        
                 return view('manual', ['scan'=>$scan]);
-            }
+            };
 
 
             $select_if = DB::table('tbitem')
@@ -704,6 +766,9 @@ class Scanner extends Controller
                         'qty'=>$e
                 );
 
+                $request->session()->forget('hasilscan');
+                $request->session()->forget('hasilscan1');
+                
                 return view('detil', ['data'=>$data]);
 
             }else{
@@ -825,6 +890,9 @@ class Scanner extends Controller
                         'qty'=>$e
                 );
 
+                $request->session()->forget('hasilscan');
+                $request->session()->forget('hasilscan1');
+
                 return view('detil', ['data'=>$data]);
             }
         }else{
@@ -832,7 +900,45 @@ class Scanner extends Controller
                 ->select('*')
                 ->get();
 
+            if($request->session()->has('hasilscan')){
+                $status = "brg";
+
+                $scan = array(
+                            'kode_user'=>$kode_user,
+                            'brg'=>$scanner,
+                            'status'=>$status
+                );
+
+                $prev = $request->session()->get('hasilscan');
+
+                if($prev==$kodebarang){
+                    $status = "brg";
+
+                    $scan = array(
+                                'kode_user'=>$kode_user,
+                                'brg'=>$scanner,
+                                'status'=>$status
+                    );
+                    
+                    $request->session()->forget('hasilscan');
+                    $request->session()->forget('hasilscan1');
+
+                    return view('manual', ['scan'=>$scan]);
+                }else{
+                    $request->session()->forget('hasilscan');
+                    $request->session()->forget('hasilscan1');
+                    
+                    session(['hasilscan'=>$kodebarang]);
+
+                    return view('manual', ['scan'=>$scan]);
+                };
+                
+            }
+            
+
             $brg0 = "brg";
+
+            session(['hasilscan'=>$kodebarang]);
 
             $scan0 = array(
                 'kode_user'=>$kode_user,
@@ -868,7 +974,8 @@ class Scanner extends Controller
 
             return view('return', ['scan'=>$scan]);
         }else{
-            return redirect('/idr')->with('iden','iden');
+            return back()->with('gagal', 'Identitasmu tidak terdaftar, Hubungi Admin Segera!');
+
         }
         
     }
@@ -910,21 +1017,83 @@ class Scanner extends Controller
                         $qty = $qty_database-$qty_get;
 
                         if($qty<0){
+
                             $scanner = DB::table('tbdetil')
                             ->select('*')
                             ->where('kode_user', $kode_user)
                             ->where('status', "belum")
                             ->get();
 
+                            if($request->session()->has('berhasil')){
+
+                                $scan = array(
+                                            'kode_user'=>$kode_user,
+                                            'brg'=>$scanner,
+                                            'status'=>$status
+                                );
+
+                                $request->session()->forget('berhasil');
+                                $request->session()->forget('hasilscan1');
+                                $request->session()->forget('hasilscan');
+
+                                return view('return', ['scan'=>$scan]);
+                            };
+
+                            if($request->session()->has('hasilscan1')){
+                                $status = "gagal";
+
+                                $scan = array(
+                                            'kode_user'=>$kode_user,
+                                            'brg'=>$scanner,
+                                            'status'=>$status
+                                );
+
+                                $prev = $request->session()->get('hasilscan1');
+
+                                if($prev==$id){
+
+                                    $status = "gagal";
+
+                                    $scan = array(
+                                                'kode_user'=>$kode_user,
+                                                'brg'=>$scanner,
+                                                'status'=>$status
+                                    );
+
+                                    $request->session()->forget('berhasil');
+                                    $request->session()->forget('hasilscan1');
+                                    $request->session()->forget('hasilscan');
+
+                                    return view('return', ['scan'=>$scan]);
+
+                                }else{
+
+                                    $request->session()->forget('berhasil');
+                                    $request->session()->forget('hasilscan1');
+                                    $request->session()->forget('hasilscan');
+
+                                    session(['hasilscan1'=>$id]);
+
+                                    return view('return', ['scan'=>$scan]);
+                                };
+                            };
+
                             $gagal = "gagal";
 
+                            $request->session()->forget('berhasil');
+                            $request->session()->forget('hasilscan1');
+                            $request->session()->forget('hasilscan');
+
+                            session(['hasilscan1'=>$id]);
+
                             $scan = array(
-                            'kode_user'=>$kode_user,
-                            'brg'=>$scanner,
-                            'status'=>$gagal
-                        );                        
+                                'kode_user'=>$kode_user,
+                                'brg'=>$scanner,
+                                'status'=>$gagal
+                            );
                             return view('return', ['scan'=>$scan]);
-                        }
+                        };
+
                         $date = Carbon::now();
 
                         $date->toDateTimeString();
@@ -968,6 +1137,9 @@ class Scanner extends Controller
                         ->where('kode_user', $kode_user)
                         ->where('status', "belum")
                         ->get();
+
+                    $co = count($scanner);
+
                     $berhasil = "berhasil";
                     
 
@@ -977,7 +1149,15 @@ class Scanner extends Controller
                         'status'=>$berhasil
                     );
 
-        
+                    $request->session()->forget('hasilscan');
+                    $request->session()->forget('hasilscan1');
+                    
+                    session(['berhasil'=>$berhasil]);
+
+                    if($co == 0){
+                        return redirect('/idr')->with('berhasil','Barang berhasil dikembalikan!'); 
+                    }
+
                     return view('return', ['scan'=>$scanb]);
 
                     }else{
@@ -988,7 +1168,69 @@ class Scanner extends Controller
                             ->where('status', "belum")
                             ->get();
 
+                        if($request->session()->has('berhasil')){
+
+                            $scan = array(
+                                'kode_user'=>$kode_user,
+                                'brg'=>$scanner,
+                                'status'=>$status
+                            );
+
+                            $request->session()->forget('berhasil');
+                            $request->session()->forget('hasilscan1');
+                            $request->session()->forget('hasilscan');
+
+                            return view('return', ['scan'=>$scan]);
+
+                        };
+
+                        if($request->session()->has('hasilscan')){
+                                $status = "gagal";
+
+                                $scan = array(
+                                            'kode_user'=>$kode_user,
+                                            'brg'=>$scanner,
+                                            'status'=>$status
+                                );
+
+                                $prev = $request->session()->get('hasilscan');
+
+                                if($prev==$id){
+
+                                    $status = "gagal";
+
+                                    $scan = array(
+                                                'kode_user'=>$kode_user,
+                                                'brg'=>$scanner,
+                                                'status'=>$status
+                                    );
+
+                                    $request->session()->forget('berhasil');
+                                    $request->session()->forget('hasilscan1');
+                                    $request->session()->forget('hasilscan');
+
+                                    return view('return', ['scan'=>$scan]);
+
+                                }else{
+
+                                    $request->session()->forget('berhasil');
+                                    $request->session()->forget('hasilscan1');
+                                    $request->session()->forget('hasilscan');
+
+                                    session(['hasilscan'=>$id]);
+
+                                    return view('return', ['scan'=>$scan]);
+                                };
+
+                            };
+
                         $gagal = "gagal";
+
+                        $request->session()->forget('berhasil');
+                        $request->session()->forget('hasilscan1');
+                        $request->session()->forget('hasilscan');
+
+                        session(['hasilscan'=>$id]);
 
                         $scan = array(
                         'kode_user'=>$kode_user,
@@ -1005,7 +1247,71 @@ class Scanner extends Controller
                         ->where('status', "belum")
                         ->get();
 
+                    if($request->session()->has('berhasil')){
+
+                        $status = "NULL";
+
+                        $scan = array(
+                            'kode_user'=>$kode_user,
+                            'brg'=>$scanner,
+                            'status'=>$status
+                        );
+
+                        $request->session()->forget('berhasil');
+                        $request->session()->forget('hasilscan1');
+                        $request->session()->forget('hasilscan');
+
+                        return view('return', ['scan'=>$scan]);
+
+                    };
+
+                    if($request->session()->has('hasilscan')){
+                                $status = "brg";
+
+                                $scan = array(
+                                            'kode_user'=>$kode_user,
+                                            'brg'=>$scanner,
+                                            'status'=>$status
+                                );
+
+                                $prev = $request->session()->get('hasilscan');
+
+                                if($prev==$id){
+
+                                    $status = "brg";
+
+                                    $scan = array(
+                                                'kode_user'=>$kode_user,
+                                                'brg'=>$scanner,
+                                                'status'=>$status
+                                    );
+            
+                                    $request->session()->forget('berhasil');
+                                    $request->session()->forget('hasilscan1');
+                                    $request->session()->forget('hasilscan');
+
+                                    return view('return', ['scan'=>$scan]);
+
+                                }else{
+            
+                                    $request->session()->forget('berhasil');
+                                    $request->session()->forget('hasilscan1');
+                                    $request->session()->forget('hasilscan');
+
+                                    session(['hasilscan'=>$id]);
+
+                                    return view('return', ['scan'=>$scan]);
+                                };
+
+                            };
+
                     $brg0 = "brg";
+
+                    $request->session()->forget('berhasil');
+                    $request->session()->forget('hasilscan1');
+                    $request->session()->forget('hasilscan');
+
+                    session(['hasilscan'=>$id]);
 
                     $scan0 = array(
                         'kode_user'=>$kode_user,
@@ -1069,16 +1375,83 @@ class Scanner extends Controller
 
                             DB::table('tbdetil')->where('id', $id)->update($data);
                         }
-                        return redirect('/idr')->with('berhasil','berhasil');
+
+                        $request->session()->forget('hasilscan');
+                        $request->session()->forget('hasilscan1');
+                        
+                        return redirect('/idr')->with('berhasil','Barang berhasil dikembalikan!');
+
                     }
                     else{
+
                         $scanner = DB::table('tbdetil')
                             ->select('*')
                             ->where('kode_user', $kode_user)
                             ->where('status', "belum")
                             ->get();
 
+                        if($request->session()->has('berhasil')){
+
+                        $status = "NULL";
+
+                        $scan = array(
+                            'kode_user'=>$kode_user,
+                            'brg'=>$scanner,
+                            'status'=>$status
+                        );
+
+                        $request->session()->forget('berhasil');
+                        $request->session()->forget('hasilscan1');
+                        $request->session()->forget('hasilscan');
+
+                        return view('return', ['scan'=>$scan]);
+
+                        };
+
+                        if($request->session()->has('hasilscan')){
+                            $status = "brg";
+
+                            $scan = array(
+                                        'kode_user'=>$kode_user,
+                                        'brg'=>$scanner,
+                                        'status'=>$status
+                            );
+
+                            $prev = $request->session()->get('hasilscan');
+
+                            if($prev==$kodebarang){
+                                $status = "brg";
+
+                                $scan = array(
+                                            'kode_user'=>$kode_user,
+                                            'brg'=>$scanner,
+                                            'status'=>$status
+                                );
+                                
+                                $request->session()->forget('berhasil');
+                                $request->session()->forget('hasilscan');
+                                $request->session()->forget('hasilscan1');
+
+                                return view('return', ['scan'=>$scan]);
+                            }else{
+                                $request->session()->forget('berhasil');
+                                $request->session()->forget('hasilscan');
+                                $request->session()->forget('hasilscan1');
+                                
+                                session(['hasilscan'=>$kodebarang]);
+
+                                return view('return', ['scan'=>$scan]);
+                            };
+                            
+                        }
+
                         $brg0 = "brg";
+
+                        $request->session()->forget('berhasil');
+                        $request->session()->forget('hasilscan1');
+                        $request->session()->forget('hasilscan');
+
+                        session(['hasilscan'=>$id]);
 
                         $scan = array(
                         'kode_user'=>$kode_user,
@@ -1107,16 +1480,13 @@ class Scanner extends Controller
             $nama = $select[0]->nama;
             $kod_user = $select[0]->kode_user;
 
-            $date = Carbon::now();
-
-            $date->toDateTimeString();
-            $waktu = $date->format('Y-m-d H:i:s');
-
             session(['nama' => $nama]);
             session(['kode_user' => $kod_user]);
 
+            $status = "Aktif";
+
             $array = array(
-                'terakhir_login'=>$waktu
+                'status'=>$status
             );
 
             DB::table('tbadmin')->select('*')->where('kode_user', $kode_user)->update($array);
@@ -1135,13 +1505,10 @@ class Scanner extends Controller
         $kode_session = $request->kode_session;
         $nama_session = $request->nama_session;
 
-        $date = Carbon::now();
-
-        $date->toDateTimeString();
-        $waktu = $date->format('Y-m-d H:i:s');
+        $status = "Tidak Aktif";
 
         $array = array(
-            'terakhir_logout'=>$waktu
+            'status'=>$status
         );
 
         DB::table('tbadmin')->select('*')->where('kode_user', $kode_session)->update($array);
@@ -1273,10 +1640,10 @@ class Scanner extends Controller
     }
 
     public function showadm()
-    {
+    {   
         $db = DB::table('tbadmin')->select('*')->get();
 
-        return view('data.tbadmin.showadmin', ['data'=>$db] );
+        return view('data.tbadmin.showadmin', ['data'=>$db]);
     }
 
     public function showuser()

@@ -37,7 +37,7 @@
 			</form>
 		</nav>
 
-		@if($scan['status'] == 'gagal')
+<!-- 		@if($scan['status'] == 'gagal')
 	        <input type="hidden" id="alert" value="{{$scan['status']}}"> 
 	    @endif
 
@@ -47,9 +47,26 @@
 
 	    @if($scan['status'] == 'berhasil')
 	        <input type="hidden" id="alert" value="{{$scan['status']}}"> 
-	    @endif
+	    @endif -->
 
 	<div class="main-content">
+		@if(Session::has('hasilscan1'))
+		    <center>
+				<div class="alert alert-danger" role="alert" style="width: 35%;text-align: left;padding: .5rem .5rem; text-align: center">Maaf Qty anda melebihi stok yang ada. Coba Lagi!</div>
+			</center>
+
+	    @elseif(Session::has('hasilscan'))
+		    <center>
+				<div class="alert alert-danger" role="alert" style="width: 35%;text-align: left;padding: .5rem .5rem; text-align: center">Id barang tidak ditemukan!
+				</div>
+			</center>
+
+		@elseif(Session::has('berhasil'))
+		    <center>
+				<div class="alert alert-success" role="alert" style="width: 35%;text-align: left;padding: .5rem .5rem; text-align: center">Berhasil Dikembalikan!
+				</div>
+			</center>
+		@endif
 	    <center>
 	    	<div class="border">
 	    		<div class="mcontent">

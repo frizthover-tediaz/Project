@@ -37,10 +37,13 @@
 
 		</nav>
 
-		@if($data['status'] == 'brg')
-		   <input type="hidden" id="alert" value="{{$data['status']}}"> 
-		@endif
+		
 	<div class="main-content">
+		@if(Session::has('hasilscan'))
+		<center>
+			<div class="alert alert-danger" role="alert" style="width: 35%;text-align: left;padding: .5rem .5rem; text-align: center">Kode Barang tidak ditemukan!</div>
+		</center>
+		@endif
 	    <div class="row">
 	        <div class="col-md-6">
 	          <video id="preview" width="480"></video>

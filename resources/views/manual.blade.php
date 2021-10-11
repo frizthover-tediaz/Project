@@ -37,12 +37,16 @@
 		</nav>
 	<div class="main-content">
 	    <center>
-	    	@if($scan['status'] == 'gagal')
-	        <input type="hidden" id="alert" value="{{$scan['status']}}"> 
-		    @endif
+	    	@if(Session::has('hasilscan1'))
+		    <center>
+				<div class="alert alert-danger" role="alert" style="width: 35%;text-align: left;padding: .5rem .5rem; text-align: center">Maaf Qty anda melebihi stok yang ada. Coba Lagi!</div>
+			</center>
 
-		    @if($scan['status'] == 'brg')
-		        <input type="hidden" id="alert" value="{{$scan['status']}}"> 
+		    @elseif(Session::has('hasilscan'))
+		    <center>
+				<div class="alert alert-danger" role="alert" style="width: 35%;text-align: left;padding: .5rem .5rem; text-align: center">Kode Barang tidak ditemukan!
+				</div>
+			</center>
 		    @endif
 	    	<div class="border">
 	    		<div class="mcontent">

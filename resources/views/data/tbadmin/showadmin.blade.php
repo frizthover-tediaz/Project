@@ -16,8 +16,7 @@
                         <th>Kode User</th>
                         <th>Nama</th>
                         <th>Password</th>
-                        <th>Terakhir Login</th>
-                        <th>Terakhir Logout</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -28,8 +27,7 @@
                             <td>{{$val->kode_user}}</td>
                             <td>{{$val->nama}}</td>
                             <td>{{$val->pass}}</td>
-                            <td>{{$val->terakhir_login}}</td>
-                            <td>{{$val->terakhir_logout}}</td>
+                            <td>{{$val->status}}</td>
                             <td>
                                 <form method="POST" action="/dataeditadm">
                                     @csrf

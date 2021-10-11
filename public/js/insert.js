@@ -8,11 +8,12 @@ navigator.mediaDevices.getUserMedia(constraints)
         if (cameras.length > 0) {
           scanner.start(cameras[0]);
         } else {
-          alert('No cameras found.');
+          var x = 0;
+          scanner.start(cameras[x]);
         }
       }).catch(function(e) 
       {
-        console.log(e);
+        alert("No Camera Found!");
       });
 
       scanner.addListener('scan', function(c){
@@ -20,7 +21,6 @@ navigator.mediaDevices.getUserMedia(constraints)
 
       document.getElementById("form").submit();
   });
-})
-.catch(function(err) {
+}).catch(function(err) {
   console.log(err.name + ": " + err.message);
 });

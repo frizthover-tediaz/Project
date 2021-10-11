@@ -36,15 +36,17 @@
 			</form>
 		</nav>
 		<center>
-		@if(session('berhasil'))
-	        <input type="hidden" id="alert" value="{{session('berhasil')}}">
-	    @endif
-
-	    @if(session('iden'))
-	        <input type="hidden" id="alert" value="{{session('iden')}}"> 
-	    @endif
-	    </center>
 	<div class="main-content">
+		@if(session('gagal'))
+			<center>
+				<div class="alert alert-danger" role="alert" style="width: 35%;text-align: left;padding: .5rem .5rem; text-align: center">{{session('gagal')}}</div>
+			</center>
+
+		@elseif(session('berhasil'))
+			<center>
+				<div class="alert alert-success" role="alert" style="width: 35%;text-align: left;padding: .5rem .5rem; text-align: center">{{session('berhasil')}}</div>
+			</center>
+		@endif
 	    <div class="row">
 	        <div class="col-md-6">
 	          <video id="preview" width="480"></video>
